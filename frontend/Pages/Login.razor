@@ -1,0 +1,94 @@
+@page "/login"
+@inject NavigationManager Navigation
+@inject AuthService Auth
+
+<PageTitle>Iniciar Sesión - ContabilidadPanama</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center justify-center" Style="height: 100vh;">
+    <MudPaper Elevation="25" Class="pa-8" Style="width: 100%; max-width: 400px; border-radius: 16px;">
+        <div class="text-center mb-6">
+            <MudText Typo="Typo.h4" Style="font-weight: 700; background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                ContabilidadPanama
+            </MudText>
+            <MudText Typo="Typo.subtitle1" Class="mt-2" Color="Color.Secondary">
+                Sistema de Gestión Financiera
+            </MudText>
+        </div>
+
+        <MudTextField @bind-Value="@email"
+                      Label="Correo Electrónico"
+                      Variant="Variant.Outlined"
+                      Margin="Margin.Normal" />
+
+        <MudTextField @bind-Value="@password"
+                      Label="Contraseña"
+                      Variant="Variant.Outlined"
+                      Margin="Margin.Normal"
+                      InputType="InputType.Password" />
+
+        <MudCheckBox T="bool" @bind-Checked="@rememberMe" Color="Color.Primary" Class="mt-2">
+            Recordarme
+        </MudCheckBox>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Class="mt-3">@errorMessage</MudAlert>
+        }
+
+        @if (isLoading)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="mt-4" />
+        }
+        else
+        {
+            <MudButton Variant="Variant.Filled"
+                      Color="Color.Primary"
+                      FullWidth="true"
+                      Size="Size.Large"
+                      Class="mt-4"
+                      OnClick="@HandleLogin">
+                Iniciar Sesión
+            </MudButton>
+        }
+
+        <MudDivider Class="my-6" />
+
+        <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary">
+            ¿No tienes cuenta? <MudLink Href="#" Color="Color.Primary">Registrarse</MudLink>
+        </MudText>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private string email = string.Empty;
+    private string password = string.Empty;
+    private bool rememberMe = false;
+    private string errorMessage = string.Empty;
+    private bool isLoading = false;
+
+    private async Task HandleLogin()
+    {
+        errorMessage = string.Empty;
+
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        {
+            errorMessage = "Por favor completa todos los campos";
+            return;
+        }
+
+        isLoading = true;
+        
+        var (success, error) = await Auth.LoginAsync(email, password);
+        
+        isLoading = false;
+
+        if (success)
+        {
+            Navigation.NavigateTo("/dashboard");
+        }
+        else
+        {
+            errorMessage = error ?? "Error al iniciar sesión";
+        }
+    }
+}

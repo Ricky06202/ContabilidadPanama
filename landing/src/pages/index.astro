@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Features from '../components/Features.astro';
+import CTA from '../components/CTA.astro';
+import SectionsWrapper from '../components/SectionsWrapper.astro';
+import { Container, Typography, Box } from '@mui/material';
+---
+
+<Layout>
+	<SectionsWrapper>
+		<Hero />
+		<Features />
+		<CTA />
+		<!-- Footer -->
+		<footer sx={{ pt: 16, pb: 8, backgroundColor: 'grey.900', color: 'white' }}>
+			<Container maxWidth="lg">
+			<Box 
+				display="flex" 
+				flexDirection={{ xs: 'column', md: 'row' }} 
+				justifyContent="space-between" 
+				alignItems="center" 
+				gap={4}
+			>
+				<Box>
+					<Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+						ContabilidadPanama
+					</Typography>
+					<Typography variant="body2" sx={{ color: 'grey.400' }}>
+						El futuro de la contabilidad en Panamá
+					</Typography>
+				</Box>
+				<Box display="flex" gap={6}>
+					<Box>
+						<Typography variant="subtitle2" sx={{ fontWeight: 'semibold', mb: 1, fontSize: '0.875rem' }}>
+							Producto
+						</Typography>
+						<Typography variant="body2" sx={{ color: 'grey.400', fontSize: '0.875rem' }}>
+							Características
+						</Typography>
+					</Box>
+					<Box>
+						<Typography variant="subtitle2" sx={{ fontWeight: 'semibold', mb: 1, fontSize: '0.875rem' }}>
+							Empresa
+						</Typography>
+						<Typography variant="body2" sx={{ color: 'grey.400', fontSize: '0.875rem' }}>
+							About
+						</Typography>
+					</Box>
+					<Box>
+						<Typography variant="subtitle2" sx={{ fontWeight: 'semibold', mb: 1, fontSize: '0.875rem' }}>
+							Contacto
+						</Typography>
+						<Typography variant="body2" sx={{ color: 'grey.400', fontSize: '0.875rem' }}>
+							soporte@contabilidadpanama.com
+						</Typography>
+					</Box>
+				</Box>
+			</Box>
+		</Container>
+		</footer>
+	</SectionsWrapper>
+</Layout>

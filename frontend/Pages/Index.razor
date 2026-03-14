@@ -1,0 +1,24 @@
+@page "/"
+@inject NavigationManager Navigation
+
+<PageTitle>Inicio - ContabilidadPanama</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="d-flex align-center justify-center" Style="height: 100vh;">
+    <MudPaper Elevation="0" Class="pa-8 text-center" Style="background: transparent;">
+        <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Color="Color.Primary" Style="font-size: 80px;" Class="mb-4" />
+        <MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mb-2">
+            ContabilidadPanama
+        </MudText>
+        <MudText Typo="Typo.body1" Color="Color.Secondary" Class="mb-6">
+            Sistema de Gestión Financiera
+        </MudText>
+        <MudStack Justify="Justify.Center" Spacing="3">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Href="/login">
+                Iniciar Sesión
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large" Href="/dashboard">
+                Ver Demo
+            </MudButton>
+        </MudStack>
+    </MudPaper>
+</MudContainer>

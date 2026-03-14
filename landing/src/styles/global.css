@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+:root {
+	--color-primary: #2563eb;
+	--color-primary-dark: #1d4ed8;
+	--color-secondary: #0f172a;
+}
+
+body {
+	font-family: 'Inter', sans-serif;
+}
+
+.gradient-text {
+	background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.hero-gradient {
+	background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.card-hover {
+	transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}

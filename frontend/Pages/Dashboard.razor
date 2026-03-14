@@ -1,0 +1,190 @@
+@page "/dashboard"
+
+<PageTitle>Dashboard - ContabilidadPanama</PageTitle>
+
+<div class="dashboard-container">
+    <!-- Header del Dashboard -->
+    <MudPaper Elevation="0" Class="pa-4 mb-6" Style="background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); border-radius: 12px;">
+        <MudGrid Justify="Justify.SpaceBetween" Class="align-center">
+            <MudItem>
+                <MudText Typo="Typo.h5" Style="font-weight: 700; color: white;">
+                    Dashboard Financiero
+                </MudText>
+                <MudText Typo="Typo.body2" Style="color: rgba(255,255,255,0.8);">
+                    Panorama general de tu negocio
+                </MudText>
+            </MudItem>
+            <MudItem>
+                <MudButton Variant="Variant.Filled" Color="Color.Default" StartIcon="@Icons.Material.Filled.Add">
+                    Nueva Transacción
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <!-- Resumen Financiero -->
+    <MudGrid Class="mb-6">
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="4" Class="rounded-xl">
+                <MudCardContent>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">Saldo Total</MudText>
+                    <MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mt-2">$15,420.50</MudText>
+                    <MudChip T="string" Size="Size.Small" Color="Color.Success" Class="mt-2">
+                        +2.5% vs mes anterior
+                    </MudChip>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="4" Class="rounded-xl">
+                <MudCardContent>
+                    <MudText Typo="Typo.body2" Color="Color.Success">Ingresos (Mes)</MudText>
+                    <MudText Typo="Typo.h4" Style="font-weight: 700; color: #16a34a;" Class="mt-2">$28,500.00</MudText>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">
+                        45 facturas emitidas
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="4" Class="rounded-xl">
+                <MudCardContent>
+                    <MudText Typo="Typo.body2" Color="Color.Error">Egresos (Mes)</MudText>
+                    <MudText Typo="Typo.h4" Style="font-weight: 700; color: #dc2626;" Class="mt-2">$18,250.00</MudText>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">
+                        23 gastos registrados
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="3">
+            <MudCard Elevation="4" Class="rounded-xl">
+                <MudCardContent>
+                    <MudText Typo="Typo.body2" Color="Color.Info">Por Cobrar</MudText>
+                    <MudText Typo="Typo.h4" Style="font-weight: 700; color: #2563eb;" Class="mt-2">$5,200.00</MudText>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">
+                        8 clientes pendientes
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <!-- Gráficos y Tablas -->
+    <MudGrid>
+        <!-- Transacciones Recientes -->
+        <MudItem xs="12" md="8">
+            <MudCard Elevation="4" Class="rounded-xl">
+                <MudCardHeader>
+                    <MudText Typo="Typo.h6" Style="font-weight: 600;">Transacciones Recientes</MudText>
+                    <MudSpacer />
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Ver todas</MudButton>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudSimpleTable Elevation="0">
+                        <thead>
+                            <tr>
+                                <th style="font-weight: 600;">Fecha</th>
+                                <th style="font-weight: 600;">Descripción</th>
+                                <th style="font-weight: 600;">Categoría</th>
+                                <th style="font-weight: 600;">Tipo</th>
+                                <th style="font-weight: 600; text-align: right;">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>12/03/2026</td>
+                                <td>Venta de servicios consultoría</td>
+                                <td><MudChip T="string" Size="Size.Small" Color="Color.Info">Servicios</MudChip></td>
+                                <td><MudIcon Icon="@Icons.Material.Filled.ArrowDownward" Color="Color.Success" Size="Size.Small" /></td>
+                                <td style="text-align: right; color: #16a34a; font-weight: 600;">$1,500.00</td>
+                            </tr>
+                            <tr>
+                                <td>11/03/2026</td>
+                                <td>Pago de energía eléctrica</td>
+                                <td><MudChip T="string" Size="Size.Small" Color="Color.Warning">Servicios Públicos</MudChip></td>
+                                <td><MudIcon Icon="@Icons.Material.Filled.ArrowUpward" Color="Color.Error" Size="Size.Small" /></td>
+                                <td style="text-align: right; color: #dc2626; font-weight: 600;">$85.50</td>
+                            </tr>
+                            <tr>
+                                <td>10/03/2026</td>
+                                <td>Compra de equipo de oficina</td>
+                                <td><MudChip T="string" Size="Size.Small" Color="Color.Secondary">Equipos</MudChip></td>
+                                <td><MudIcon Icon="@Icons.Material.Filled.ArrowUpward" Color="Color.Error" Size="Size.Small" /></td>
+                                <td style="text-align: right; color: #dc2626; font-weight: 600;">$250.75</td>
+                            </tr>
+                            <tr>
+                                <td>09/03/2026</td>
+                                <td>Pago de nómina</td>
+                                <td><MudChip T="string" Size="Size.Small" Color="Color.Error">Nómina</MudChip></td>
+                                <td><MudIcon Icon="@Icons.Material.Filled.ArrowUpward" Color="Color.Error" Size="Size.Small" /></td>
+                                <td style="text-align: right; color: #dc2626; font-weight: 600;">$1,200.00</td>
+                            </tr>
+                        </tbody>
+                    </MudSimpleTable>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- Panel Lateral -->
+        <MudItem xs="12" md="4">
+            <!-- Facturas Pendientes -->
+            <MudCard Elevation="4" Class="rounded-xl mb-4">
+                <MudCardHeader>
+                    <MudText Typo="Typo.h6" Style="font-weight: 600;">Facturas Pendientes</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudStack Spacing="2">
+                        <MudPaper Elevation="0" Class="pa-3" Style="background-color: #fef3c7;">
+                            <div class="d-flex justify-space-between align-center">
+                                <MudText Typo="Typo.body2">Cliente A</MudText>
+                                <MudText Typo="Typo.body2" Style="font-weight: 600;">$1,200.00</MudText>
+                            </div>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">Vence: 15/03/2026</MudText>
+                        </MudPaper>
+                        <MudPaper Elevation="0" Class="pa-3" Style="background-color: #fef3c7;">
+                            <div class="d-flex justify-space-between align-center">
+                                <MudText Typo="Typo.body2">Cliente B</MudText>
+                                <MudText Typo="Typo.body2" Style="font-weight: 600;">$850.00</MudText>
+                            </div>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">Vence: 18/03/2026</MudText>
+                        </MudPaper>
+                    </MudStack>
+                </MudCardContent>
+            </MudCard>
+
+            <!-- Acciones Rápidas -->
+            <MudCard Elevation="4" Class="rounded-xl">
+                <MudCardHeader>
+                    <MudText Typo="Typo.h6" Style="font-weight: 600;">Acciones Rápidas</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudStack Spacing="2">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.AddCircle">
+                            Nueva Factura
+                        </MudButton>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Receipt">
+                            Registrar Gasto
+                        </MudButton>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.People">
+                            Nuevo Cliente
+                        </MudButton>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Description">
+                            Reporte Mensual
+                        </MudButton>
+                    </MudStack>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.CompletedTask;
+    }
+}

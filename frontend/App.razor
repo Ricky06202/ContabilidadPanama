@@ -1,0 +1,19 @@
+<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <MudContainer MaxWidth="MaxWidth.Medium" Class="d-flex align-center justify-center" Style="height: 100vh;">
+                <div class="text-center">
+                    <MudText Typo="Typo.h1" Color="Color.Primary" Style="font-weight: 800;">404</MudText>
+                    <MudText Typo="Typo.h5" Class="my-4">Página no encontrada</MudText>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/">
+                        Volver al Inicio
+                    </MudButton>
+                </div>
+            </MudContainer>
+        </LayoutView>
+    </NotFound>
+</Router>

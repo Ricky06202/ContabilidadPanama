@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Backend
+*.db
+.env
+*.log
+
+# Frontend (Blazor)
+bin/
+obj/
+wwwroot/_framework/
+wwwroot/_content/
+Properties/
+*.user
+*.suo
+
+# Landing Page (Astro)
+node_modules/
+.astro/
+dist/
+.rollup.cache/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
