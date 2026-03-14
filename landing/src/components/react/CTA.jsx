@@ -38,6 +38,7 @@ const CTA = () => {
 						variant="contained"
 						size="large"
 						startIcon={<RocketLaunchIcon />}
+						href="https://app.contapanama.rsanjur.com"
 						sx={{
 							background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
 							px: 5,
@@ -51,7 +52,7 @@ const CTA = () => {
 							},
 						}}
 					>
-						Comenzar ahora - Es gratis
+						Comenzar ahora
 					</Button>
 				</Box>
 			</Container>
