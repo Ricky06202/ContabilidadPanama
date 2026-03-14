@@ -1,67 +1,213 @@
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
+@inject ThemeService Theme
+@using System.Globalization
+@using System.ComponentModel
 
-<MudThemeProvider Theme="currentTheme" @bind-IsDarkMode="@_isDarkMode" />
+<MudThemeProvider Theme="@Theme.CurrentTheme" @bind-IsDarkMode="@Theme.IsDarkMode" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="1" Style="background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudText Typo="Typo.h5" Class="ml-3" Style="font-weight: 700;">ContabilidadPanama</MudText>
+    <MudAppBar Elevation="2" Dense="true" Class="app-bar-gradient">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle" />
+        
+        <MudText Typo="Typo.h6" Class="ml-3 brand-text">
+            <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Medium" Class="mr-2" />
+            ContabilidadPanama
+        </MudText>
+        
         <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="@ToggleDarkMode" />
-        <MudIconButton Icon="@Icons.Material.Filled.Person" Color="Color.Inherit" />
+        
+        <MudText Typo="Typo.body2" Class="mr-4 d-none d-sm-flex" Style="opacity: 0.8;">
+            @currentDate.ToString("dddd, d MMMM yyyy", spanishCulture)
+        </MudText>
+        
+        <MudIconButton Icon="@Icons.Material.Filled.Search" Color="Color.Inherit" Class="mr-1" Title="Buscar (Ctrl+K)" />
+        
+        <MudIconButton Icon="@(Theme.IsDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" 
+                       Color="Color.Inherit" 
+                       OnClick="@ToggleTheme" 
+                       Title="@(Theme.IsDarkMode ? "Modo Claro" : "Modo Oscuro")" />
+        
+        <MudMenu Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit">
+            <MudMenuItem>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudIcon Icon="@Icons.Material.Filled.Warning" Color="Color.Warning" Size="Size.Small" />
+                    <MudText>3 facturas pendientes</MudText>
+                </MudStack>
+            </MudMenuItem>
+            <MudMenuItem>
+                <MudStack Row="true" AlignItems="AlignItems.Center">
+                    <MudIcon Icon="@Icons.Material.Filled.Info" Color="Color.Info" Size="Size.Small" />
+                    <MudText>Nuevo reporte disponible</MudText>
+                </MudStack>
+            </MudMenuItem>
+        </MudMenu>
+        
+        <MudMenu Icon="@Icons.Material.Filled.Person" Color="Color.Inherit">
+            <MudMenuItem Href="/profile">
+                <MudIcon Icon="@Icons.Material.Filled.Person" Class="mr-2" />
+                Mi Perfil
+            </MudMenuItem>
+            <MudMenuItem Href="/settings">
+                <MudIcon Icon="@Icons.Material.Filled.Settings" Class="mr-2" />
+                Configuración
+            </MudMenuItem>
+            <MudDivider />
+            <MudMenuItem OnClick="Logout">
+                <MudIcon Icon="@Icons.Material.Filled.Logout" Class="mr-2" />
+                Cerrar Sesión
+            </MudMenuItem>
+        </MudMenu>
     </MudAppBar>
 
-    <MudDrawer @bind-Open="@_drawerOpen" Elevation="2" Style="background-color: #f8fafc;">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h6" Style="font-weight: 700; color: #2563eb;">ContabilidadPanama</MudText>
+    <MudDrawer @bind-Open="@_drawerOpen" Elevation="2" Variant="@DrawerVariant.Mini" MiniWidth="72px" ClipMode="DrawerClipMode.Always">
+        <MudDrawerHeader Class="pa-2">
+            <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Large" Color="Color.Primary" />
         </MudDrawerHeader>
 
-        <MudNavMenu>
-            <MudNavLink Href="" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-            <MudNavLink Href="invoices" Icon="@Icons.Material.Filled.Description">Facturas</MudNavLink>
-            <MudNavLink Href="expenses" Icon="@Icons.Material.Filled.Payments">Gastos</MudNavLink>
-            <MudNavLink Href="clients" Icon="@Icons.Material.Filled.People">Clientes</MudNavLink>
-            <MudNavLink Href="products" Icon="@Icons.Material.Filled.Inventory2">Productos</MudNavLink>
-            <MudNavLink Href="reports" Icon="@Icons.Material.Filled.Analytics">Reportes</MudNavLink>
+        <MudNavMenu Rounded="true" Margin="Margin.Dense" Class="pa-1">
+            <MudTooltip Text="Dashboard" Placement="Placement.Right">
+                <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All">
+                    <MudText Class="d-none d-md-flex">Dashboard</MudText>
+                </MudNavLink>
+            </MudTooltip>
+            
+            <MudTooltip Text="Facturación" Placement="Placement.Right">
+                <MudNavLink Href="/invoices" Icon="@Icons.Material.Filled.Description">
+                    <MudText Class="d-none d-md-flex">Facturas</MudText>
+                </MudNavLink>
+            </MudTooltip>
+            
+            <MudTooltip Text="Clientes" Placement="Placement.Right">
+                <MudNavLink Href="/clients" Icon="@Icons.Material.Filled.People">
+                    <MudText Class="d-none d-md-flex">Clientes</MudText>
+                </MudNavLink>
+            </MudTooltip>
+            
+            <MudTooltip Text="Proveedores" Placement="Placement.Right">
+                <MudNavLink Href="/providers" Icon="@Icons.Material.Filled.LocalShipping">
+                    <MudText Class="d-none d-md-flex">Proveedores</MudText>
+                </MudNavLink>
+            </MudTooltip>
+            
+            <MudTooltip Text="Productos" Placement="Placement.Right">
+                <MudNavLink Href="/products" Icon="@Icons.Material.Filled.Inventory2">
+                    <MudText Class="d-none d-md-flex">Productos</MudText>
+                </MudNavLink>
+            </MudTooltip>
+            
+            <MudTooltip Text="Gastos" Placement="Placement.Right">
+                <MudNavLink Href="/expenses" Icon="@Icons.Material.Filled.Payments">
+                    <MudText Class="d-none d-md-flex">Gastos</MudText>
+                </MudNavLink>
+            </MudTooltip>
+            
+            <MudTooltip Text="Bancos" Placement="Placement.Right">
+                <MudNavLink Href="/banking" Icon="@Icons.Material.Filled.AccountBalance">
+                    <MudText Class="d-none d-md-flex">Bancos</MudText>
+                </MudNavLink>
+            </MudTooltip>
+            
+            <MudTooltip Text="Nómina" Placement="Placement.Right">
+                <MudNavLink Href="/payroll" Icon="@Icons.Material.Filled.Badge">
+                    <MudText Class="d-none d-md-flex">Nómina</MudText>
+                </MudNavLink>
+            </MudTooltip>
+            
+            <MudDivider Class="my-2" />
+            
+            <MudTooltip Text="Reportes" Placement="Placement.Right">
+                <MudNavLink Href="/reports" Icon="@Icons.Material.Filled.Analytics">
+                    <MudText Class="d-none d-md-flex">Reportes</MudText>
+                </MudNavLink>
+            </MudTooltip>
+            
+            <MudTooltip Text="Configuración" Placement="Placement.Right">
+                <MudNavLink Href="/settings" Icon="@Icons.Material.Filled.Settings">
+                    <MudText Class="d-none d-md-flex">Ajustes</MudText>
+                </MudNavLink>
+            </MudTooltip>
         </MudNavMenu>
     </MudDrawer>
 
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="my-4">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="py-4">
             @Body
         </MudContainer>
     </MudMainContent>
 </MudLayout>
 
+<div id="blazor-error-ui">
+    <MudAlert Severity="Severity.Error" Dense="true">
+        Se produjo un error. Por favor, recarga la página.
+    </MudAlert>
+    <button class="reload" onclick="location.reload()">Recargar</button>
+    <button class="dismiss">Dismiss</button>
+</div>
+
 @code {
     private bool _drawerOpen = true;
-    private bool _isDarkMode = false;
+    private readonly DateTime currentDate = DateTime.Now;
+    private readonly CultureInfo spanishCulture = new CultureInfo("es-PA");
 
-    private MudTheme currentTheme = new MudTheme()
+    protected override async Task OnInitializedAsync()
     {
-        PaletteLight = new PaletteLight()
-        {
-            Primary = "#2563eb",
-            Secondary = "#7c3aed",
-            AppbarBackground = "#2563eb",
-        },
-        PaletteDark = new PaletteDark()
-        {
-            Primary = "#3b82f6",
-            Secondary = "#8b5cf6",
-        }
-    };
-
-    private void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
+        Theme.PropertyChanged += OnThemeChanged;
+        await Theme.LoadPreferenceAsync();
     }
 
-    private void ToggleDarkMode()
+    private void OnThemeChanged(object? sender, PropertyChangedEventArgs e)
     {
-        _isDarkMode = !_isDarkMode;
+        if (e.PropertyName == nameof(ThemeService.IsDarkMode) || e.PropertyName == nameof(ThemeService.CurrentTheme))
+        {
+            StateHasChanged();
+        }
+    }
+
+    private void DrawerToggle() => _drawerOpen = !_drawerOpen;
+
+    private async Task ToggleTheme()
+    {
+        Theme.ToggleTheme();
+        await Theme.SavePreferenceAsync();
+    }
+
+    private void Logout()
+    {
+        Navigation.NavigateTo("/login");
     }
 }
+
+<style>
+    .app-bar-gradient {
+        background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%) !important;
+    }
+    
+    .brand-text {
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    
+    :root {
+        --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    
+    body {
+        font-family: var(--font-family);
+    }
+    
+    #blazor-error-ui {
+        display: none;
+    }
+    
+    .mud-nav-link {
+        border-radius: 8px !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .mud-nav-link.active {
+        background: rgba(37, 99, 235, 0.1) !important;
+    }
+</style>

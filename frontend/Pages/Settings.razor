@@ -1,0 +1,491 @@
+@page "/settings"
+@using System.ComponentModel
+@inject ApiService Api
+@inject ThemeService Theme
+@inject ISnackbar Snackbar
+
+<PageTitle>Configuración - ContabilidadPanama</PageTitle>
+
+<MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mb-4">Configuración</MudText>
+
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true">
+    <MudTabPanel Text="Empresa" Icon="@Icons.Material.Filled.Business">
+        <MudPaper Elevation="0" Class="pa-4">
+            <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Datos de la Empresa</MudText>
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudTextField T="string" @bind-Value="companyData.Ruc" Label="RUC" FullWidth="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField T="string" @bind-Value="companyData.Name" Label="Razón Social" FullWidth="true" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField T="string" @bind-Value="companyData.Address" Label="Dirección" FullWidth="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField T="string" @bind-Value="companyData.Phone" Label="Teléfono" FullWidth="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField T="string" @bind-Value="companyData.Email" Label="Email" FullWidth="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField T="string" @bind-Value="companyData.Regimen" Label="Régimen" FullWidth="true" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField T="string" @bind-Value="companyData.Activity" Label="Actividad Económica" FullWidth="true" />
+                </MudItem>
+            </MudGrid>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="SaveCompanyData" Disabled="saving">
+                @if (saving)
+                {
+                    <MudProgressCircular Class="mr-2" Size="Size.Small" Indeterminate="true" />
+                }
+                Guardar Cambios
+            </MudButton>
+        </MudPaper>
+    </MudTabPanel>
+
+    <MudTabPanel Text="Preferencias" Icon="@Icons.Material.Filled.Settings">
+        <MudPaper Elevation="0" Class="pa-4">
+            <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Preferencias de Usuario</MudText>
+            
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                <MudSwitch T="bool" @bind-Value="Theme.IsDarkMode" Label="Modo Oscuro" Color="Color.Primary" />
+            </MudStack>
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                <MudSwitch T="bool" @bind-Value="preferences.EmailNotifications" Label="Notificaciones por Email" Color="Color.Primary" Disabled="true" />
+                <MudChip T="string" Size="Size.Small" Color="Color.Warning">Próximamente</MudChip>
+            </MudStack>
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                <MudSwitch T="bool" @bind-Value="preferences.AutoBackup" Label="Respaldo automático diario" Color="Color.Primary" Disabled="true" />
+                <MudChip T="string" Size="Size.Small" Color="Color.Warning">Próximamente</MudChip>
+            </MudStack>
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                <MudSwitch T="bool" @bind-Value="preferences.CompactView" Label="Vista compacta por defecto" Color="Color.Primary" Disabled="true" />
+                <MudChip T="string" Size="Size.Small" Color="Color.Warning">Próximamente</MudChip>
+            </MudStack>
+            
+            <MudDivider Class="my-4" />
+            
+            <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Configuración Regional</MudText>
+            <MudAlert Severity="Severity.Info" Dense="true" Class="mb-4">
+                <MudIcon Icon="@Icons.Material.Filled.Info" Size="Size.Small" Class="mr-1" />
+                Próximamente disponible
+            </MudAlert>
+            @* <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudSelect T="string" @bind-Value="preferences.Currency" Label="Moneda" FullWidth="true">
+                        <MudSelectItem T="string" Value="@("PAB")">Balboa (PAB)</MudSelectItem>
+                        <MudSelectItem T="string" Value="@("USD")">Dólar (USD)</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudSelect T="string" @bind-Value="preferences.DateFormat" Label="Formato de Fecha" FullWidth="true">
+                        <MudSelectItem T="string" Value="@("dd/MM/yyyy")">dd/MM/yyyy</MudSelectItem>
+                        <MudSelectItem T="string" Value="@("MM/dd/yyyy")">MM/dd/yyyy</MudSelectItem>
+                        <MudSelectItem T="string" Value="@("yyyy-MM-dd")">yyyy-MM-dd</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            </MudGrid> *@
+            
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="SavePreferences" Disabled="true">
+                Guardar Preferencias (Próximamente)
+            </MudButton>
+        </MudPaper>
+    </MudTabPanel>
+
+    <MudTabPanel Text="Seguridad" Icon="@Icons.Material.Filled.Security">
+        <MudPaper Elevation="0" Class="pa-4">
+            <MudAlert Severity="Severity.Info" Dense="true" Class="mb-4">
+                <MudIcon Icon="@Icons.Material.Filled.Info" Size="Size.Small" Class="mr-1" />
+                Funciones de seguridad Próximamente disponible
+            </MudAlert>
+            
+            <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Seguridad de la Cuenta</MudText>
+            
+            <MudAlert Severity="Severity.Info" Class="mb-4">
+                <MudText>Última conexión: <strong>@lastLogin</strong></MudText>
+            </MudAlert>
+            
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.subtitle1" Style="font-weight: 600;">Cambiar Contraseña</MudText>
+                            <MudText Typo="Typo.body2" Class="mb-3">Actualiza tu contraseña regularmente por seguridad.</MudText>
+                            <MudTextField T="string" Label="Contraseña Actual" InputType="InputType.Password" FullWidth="true" Class="mb-2" />
+                            <MudTextField T="string" Label="Nueva Contraseña" InputType="InputType.Password" FullWidth="true" Class="mb-2" />
+                            <MudTextField T="string" Label="Confirmar Contraseña" InputType="InputType.Password" FullWidth="true" />
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-3">
+                                Actualizar Contraseña
+                            </MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.subtitle1" Style="font-weight: 600;">Autenticación de Dos Factores</MudText>
+                            <MudText Typo="Typo.body2" Class="mb-3">Añade una capa extra de seguridad a tu cuenta.</MudText>
+                            @if (twoFactorEnabled)
+                            {
+                                <MudAlert Severity="Severity.Success" Dense="true">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small" Class="mr-1" />
+                                    2FA está habilitado
+                                </MudAlert>
+                                <MudButton Variant="Variant.Outlined" Color="Color.Error" Class="mt-2">
+                                    Desactivar 2FA
+                                </MudButton>
+                            }
+                            else
+                            {
+                                <MudAlert Severity="Severity.Warning" Dense="true">
+                                    <MudIcon Icon="@Icons.Material.Filled.Warning" Size="Size.Small" Class="mr-1" />
+                                    2FA no está habilitado
+                                </MudAlert>
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">
+                                    Activar 2FA
+                                </MudButton>
+                            }
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+            
+            <MudDivider Class="my-4" />
+            
+            <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Sesiones Activas</MudText>
+            <MudTable Items="@sessions" Dense="true" Hover="true">
+                <HeaderContent>
+                    <MudTh>Dispositivo</MudTh>
+                    <MudTh>Ubicación</MudTh>
+                    <MudTh>Última Actividad</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>
+                        <MudStack Row="true" AlignItems="AlignItems.Center">
+                            <MudIcon Icon="@Icons.Material.Filled.Computer" Size="Size.Small" />
+                            <MudText>@context.Device</MudText>
+                        </MudStack>
+                    </MudTd>
+                    <MudTd>@context.Location</MudTd>
+                    <MudTd>@context.LastActivity</MudTd>
+                    <MudTd>
+                        @if (!context.IsCurrent)
+                        {
+                            <MudButton Variant="Variant.Text" Color="Color.Error" Size="Size.Small">
+                                Cerrar
+                            </MudButton>
+                        }
+                        else
+                        {
+                            <MudChip T="string" Size="Size.Small" Color="Color.Success">Actual</MudChip>
+                        }
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudPaper>
+    </MudTabPanel>
+
+    <MudTabPanel Text="Integraciones" Icon="@Icons.Material.Filled.Extension">
+        <MudPaper Elevation="0" Class="pa-4">
+            <MudAlert Severity="Severity.Info" Dense="true" Class="mb-4">
+                <MudIcon Icon="@Icons.Material.Filled.Info" Size="Size.Small" Class="mr-1" />
+                Integraciones bancarias Próximamente disponibles
+            </MudAlert>
+            
+            <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Integraciones con Servicios Externos</MudText>
+            
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                                <MudStack Row="true" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.Receipt" Size="Size.Large" Color="Color.Primary" />
+                                    <div>
+                                        <MudText Typo="Typo.subtitle1" Style="font-weight: 600;">DGI - Facturación Electrónica</MudText>
+                                        <MudText Typo="Typo.caption">Dirección General de Ingresos</MudText>
+                                    </div>
+                                </MudStack>
+                                <MudChip T="string" Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success">Conectado</MudChip>
+                            </MudStack>
+                            <MudDivider Class="my-3" />
+                            <MudTextField T="string" Label="Token API" Value="@dgiToken" FullWidth="true" />
+                            <MudButton Variant="Variant.Outlined" Color="Color.Primary" Class="mt-2" FullWidth="true">
+                                Actualizar Token
+                            </MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                                <MudStack Row="true" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Large" Color="Color.Secondary" />
+                                    <div>
+                                        <MudText Typo="Typo.subtitle1" Style="font-weight: 600;">SFEP</MudText>
+                                        <MudText Typo="Typo.caption">Sistema de Facturación Electrónica de Panama</MudText>
+                                    </div>
+                                </MudStack>
+                                <MudChip T="string" Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success">Conectado</MudChip>
+                            </MudStack>
+                            <MudDivider Class="my-3" />
+                            <MudTextField T="string" Label="Clave Privada" Value="@sfepKey" FullWidth="true" />
+                            <MudButton Variant="Variant.Outlined" Color="Color.Primary" Class="mt-2" FullWidth="true">
+                                Actualizar Clave
+                            </MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                                <MudStack Row="true" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Large" Color="Color.Warning" />
+                                    <div>
+                                        <MudText Typo="Typo.subtitle1" Style="font-weight: 600;">Banco General</MudText>
+                                        <MudText Typo="Typo.caption">Conciliación bancaria automática</MudText>
+                                    </div>
+                                </MudStack>
+                                <MudChip T="string" Variant="Variant.Outlined">No conectado</MudChip>
+                            </MudStack>
+                            <MudDivider Class="my-3" />
+                            <MudTextField T="string" Label="Usuario API" FullWidth="true" Class="mb-2" />
+                            <MudTextField T="string" Label="Contraseña API" InputType="InputType.Password" FullWidth="true" />
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-2" FullWidth="true">
+                                Conectar
+                            </MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+                
+                <MudItem xs="12" md="6">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                                <MudStack Row="true" AlignItems="AlignItems.Center">
+                                    <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Large" Color="Color.Info" />
+                                    <div>
+                                        <MudText Typo="Typo.subtitle1" Style="font-weight: 600;">Banistmo</MudText>
+                                        <MudText Typo="Typo.caption">Conciliación bancaria automática</MudText>
+                                    </div>
+                                </MudStack>
+                                <MudChip T="string" Variant="Variant.Outlined">No conectado</MudChip>
+                            </MudStack>
+                            <MudDivider Class="my-3" />
+                            <MudTextField T="string" Label="Usuario API" FullWidth="true" Class="mb-2" />
+                            <MudTextField T="string" Label="Contraseña API" InputType="InputType.Password" FullWidth="true" />
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-2" FullWidth="true">
+                                Conectar
+                            </MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudTabPanel>
+
+    <MudTabPanel Text="Notificaciones" Icon="@Icons.Material.Filled.Notifications">
+        <MudPaper Elevation="0" Class="pa-4">
+            <MudAlert Severity="Severity.Info" Dense="true" Class="mb-4">
+                <MudIcon Icon="@Icons.Material.Filled.Info" Size="Size.Small" Class="mr-1" />
+                Sistema de notificaciones Próximamente disponible
+            </MudAlert>
+            
+            <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Configuración de Notificaciones</MudText>
+            
+            <MudList T="string">
+                <MudListItem>
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                        <div>
+                            <MudText>Facturas pendientes de pago</MudText>
+                            <MudText Typo="Typo.caption">Recibe alertas cuando tengas facturas pendientes</MudText>
+                        </div>
+                        <MudSwitch T="bool" @bind-Value="notifications.InvoiceReminders" Color="Color.Primary" />
+                    </MudStack>
+                </MudListItem>
+                <MudListItem>
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                        <div>
+                            <MudText>Recordatorios de nómina</MudText>
+                            <MudText Typo="Typo.caption">Notificaciones sobre pagos de nómina</MudText>
+                        </div>
+                        <MudSwitch T="bool" @bind-Value="notifications.PayrollReminders" Color="Color.Primary" />
+                    </MudStack>
+                </MudListItem>
+                <MudListItem>
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                        <div>
+                            <MudText>Alertas de inventario bajo</MudText>
+                            <MudText Typo="Typo.caption">Cuando el stock esté bajo el mínimo</MudText>
+                        </div>
+                        <MudSwitch T="bool" @bind-Value="notifications.LowStock" Color="Color.Primary" />
+                    </MudStack>
+                </MudListItem>
+                <MudListItem>
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                        <div>
+                            <MudText>Resumen semanal</MudText>
+                            <MudText Typo="Typo.caption">Resumen de actividades de la semana</MudText>
+                        </div>
+                        <MudSwitch T="bool" @bind-Value="notifications.WeeklySummary" Color="Color.Primary" />
+                    </MudStack>
+                </MudListItem>
+            </MudList>
+            
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="SaveNotifications">
+                Guardar Notificaciones
+            </MudButton>
+        </MudPaper>
+    </MudTabPanel>
+</MudTabs>
+
+@code {
+    private bool saving = false;
+    private bool twoFactorEnabled = false;
+    private string lastLogin = "Hoy a las 09:15 AM";
+    private string dgiToken = "••••••••••••••••";
+    private string sfepKey = "••••••••••••••••";
+    
+    private CompanyData companyData = new();
+    private UserPreferences preferences = new();
+    private NotificationSettings notifications = new();
+    
+    private List<Session> sessions = new()
+    {
+        new() { Device = "Chrome - Windows", Location = "Panama City, Panama", LastActivity = "Ahora", IsCurrent = true },
+        new() { Device = "Safari - iPhone", Location = "Panama City, Panama", LastActivity = "Hace 2 horas", IsCurrent = false }
+    };
+    
+    protected override async Task OnInitializedAsync()
+    {
+        Theme.PropertyChanged += OnThemeChanged;
+        await LoadSettings();
+    }
+
+    private void OnThemeChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ThemeService.IsDarkMode))
+        {
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        Theme.PropertyChanged -= OnThemeChanged;
+    }
+    
+    private async Task LoadSettings()
+    {
+        try
+        {
+            var tenant = await Api.GetAsync<TenantDto>("/tenants/current");
+            if (tenant != null)
+            {
+                companyData = new CompanyData
+                {
+                    Ruc = tenant.Ruc ?? "",
+                    Name = tenant.Name ?? "",
+                    Address = tenant.Address ?? "",
+                    Phone = tenant.Phone ?? "",
+                    Email = ""
+                };
+            }
+        }
+        catch
+        {
+            companyData = new CompanyData
+            {
+                Ruc = "1234567-1-123456",
+                Name = "Mi Empresa S.A.",
+                Address = "Ciudad de Panamá, Panamá",
+                Phone = "+507 123-4567",
+                Email = "info@miempresa.com",
+                Regimen = "Contribuyente Ordinario",
+                Activity = "Servicios Contables"
+            };
+        }
+    }
+    
+    private async Task SaveCompanyData()
+    {
+        saving = true;
+        try
+        {
+            await Api.PutAsync<object>("/tenants/current", companyData);
+            Snackbar.Add("Datos de empresa guardados", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Error: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            saving = false;
+        }
+    }
+    
+    private async Task SavePreferences()
+    {
+        await Theme.SavePreferenceAsync();
+        Snackbar.Add("Preferencias guardadas", Severity.Success);
+    }
+    
+    private void SaveNotifications()
+    {
+        Snackbar.Add("Notificaciones guardadas", Severity.Success);
+    }
+    
+    class CompanyData
+    {
+        public string Ruc { get; set; } = "";
+        public string Name { get; set; } = "";
+        public string Address { get; set; } = "";
+        public string Phone { get; set; } = "";
+        public string Email { get; set; } = "";
+        public string Regimen { get; set; } = "";
+        public string Activity { get; set; } = "";
+    }
+    
+    class UserPreferences
+    {
+        public bool EmailNotifications { get; set; } = true;
+        public bool AutoBackup { get; set; } = true;
+        public bool CompactView { get; set; } = false;
+        public string Currency { get; set; } = "USD";
+        public string DateFormat { get; set; } = "dd/MM/yyyy";
+    }
+    
+    class NotificationSettings
+    {
+        public bool InvoiceReminders { get; set; } = true;
+        public bool PayrollReminders { get; set; } = true;
+        public bool LowStock { get; set; } = true;
+        public bool WeeklySummary { get; set; } = false;
+    }
+    
+    class Session
+    {
+        public string Device { get; set; } = "";
+        public string Location { get; set; } = "";
+        public string LastActivity { get; set; } = "";
+        public bool IsCurrent { get; set; }
+    }
+    
+    class TenantDto
+    {
+        public int Id { get; set; }
+        public string? Ruc { get; set; }
+        public string? Name { get; set; }
+        public string? Address { get; set; }
+        public string? Phone { get; set; }
+    }
+}

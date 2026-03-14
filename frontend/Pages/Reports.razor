@@ -1,0 +1,833 @@
+@page "/reports"
+@page "/reports/{ReportType}"
+@inject ApiService Api
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+
+<PageTitle>Reportes - ContabilidadPanama</PageTitle>
+
+<MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mb-4">Reportes</MudText>
+
+@if (string.IsNullOrEmpty(ReportType))
+{
+    <MudGrid>
+        <MudItem xs="12" md="6" lg="3">
+            <MudPaper Elevation="2" Style="border-radius: 16px; cursor: pointer;" Class="pa-4 report-card" @onclick='() => NavigateTo("income-statement")'>
+                <MudIcon Icon="@Icons.Material.Filled.Assessment" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                <MudText Typo="Typo.h6" Style="font-weight: 600;">Estado de Resultados</MudText>
+                <MudText Typo="Typo.body2" Style="opacity: 0.7;">Resumen de ingresos y gastos</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" md="6" lg="3">
+            <MudPaper Elevation="2" Style="border-radius: 16px; cursor: pointer;" Class="pa-4 report-card" @onclick='() => NavigateTo("balance-sheet")'>
+                <MudIcon Icon="@Icons.Material.Filled.BarChart" Size="Size.Large" Color="Color.Secondary" Class="mb-3" />
+                <MudText Typo="Typo.h6" Style="font-weight: 600;">Balance General</MudText>
+                <MudText Typo="Typo.body2" Style="opacity: 0.7;">Situación financiera actual</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" md="6" lg="3">
+            <MudPaper Elevation="2" Style="border-radius: 16px; cursor: pointer;" Class="pa-4 report-card" @onclick='() => NavigateTo("cash-flow")'>
+                <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Large" Color="Color.Success" Class="mb-3" />
+                <MudText Typo="Typo.h6" Style="font-weight: 600;">Flujo de Caja</MudText>
+                <MudText Typo="Typo.body2" Style="opacity: 0.7;">Movimientos de efectivo</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" md="6" lg="3">
+            <MudPaper Elevation="2" Style="border-radius: 16px; cursor: pointer;" Class="pa-4 report-card" @onclick='() => NavigateTo("general-ledger")'>
+                <MudIcon Icon="@Icons.Material.Filled.Receipt" Size="Size.Large" Color="Color.Warning" Class="mb-3" />
+                <MudText Typo="Typo.h6" Style="font-weight: 600;">Libro Mayor</MudText>
+                <MudText Typo="Typo.body2" Style="opacity: 0.7;">Detalle de cuentas</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" md="6" lg="3">
+            <MudPaper Elevation="2" Style="border-radius: 16px; cursor: pointer;" Class="pa-4 report-card" @onclick='() => NavigateTo("accounts-receivable")'>
+                <MudIcon Icon="@Icons.Material.Filled.Description" Size="Size.Large" Color="Color.Error" Class="mb-3" />
+                <MudText Typo="Typo.h6" Style="font-weight: 600;">Cuentas por Cobrar</MudText>
+                <MudText Typo="Typo.body2" Style="opacity: 0.7;">Clientes pendientes</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" md="6" lg="3">
+            <MudPaper Elevation="2" Style="border-radius: 16px; cursor: pointer;" Class="pa-4 report-card" @onclick='() => NavigateTo("accounts-payable")'>
+                <MudIcon Icon="@Icons.Material.Filled.CreditCard" Size="Size.Large" Color="Color.Info" Class="mb-3" />
+                <MudText Typo="Typo.h6" Style="font-weight: 600;">Cuentas por Pagar</MudText>
+                <MudText Typo="Typo.body2" Style="opacity: 0.7;">Proveedores pendientes</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" md="6" lg="3">
+            <MudPaper Elevation="2" Style="border-radius: 16px; cursor: pointer;" Class="pa-4 report-card" @onclick='() => NavigateTo("inventory")'>
+                <MudIcon Icon="@Icons.Material.Filled.Inventory" Size="Size.Large" Color="Color.Primary" Class="mb-3" />
+                <MudText Typo="Typo.h6" Style="font-weight: 600;">Inventario</MudText>
+                <MudText Typo="Typo.body2" Style="opacity: 0.7;">Resumen de productos</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" md="6" lg="3">
+            <MudPaper Elevation="2" Style="border-radius: 16px; cursor: pointer;" Class="pa-4 report-card" @onclick='() => NavigateTo("payroll-report")'>
+                <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Large" Color="Color.Secondary" Class="mb-3" />
+                <MudText Typo="Typo.h6" Style="font-weight: 600;">Nómina</MudText>
+                <MudText Typo="Typo.body2" Style="opacity: 0.7;">Resumen de empleados</MudText>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.ArrowBack" OnClick="BackToReports" Class="mb-4">
+        Volver a Reportes
+    </MudButton>
+    
+    <MudPaper Elevation="2" Style="border-radius: 16px;" Class="pa-4 mb-4">
+        <MudGrid AlignItems="AlignItems.Center">
+            <MudItem xs="12" md="4">
+                <MudText Typo="Typo.h5" Style="font-weight: 600;">@GetReportTitle()</MudText>
+            </MudItem>
+            <MudItem xs="12" md="4">
+                <MudDatePicker Label="Fecha Inicio" @bind-Date="startDate" />
+            </MudItem>
+            <MudItem xs="12" md="4">
+                <MudDatePicker Label="Fecha Fin" @bind-Date="endDate" />
+            </MudItem>
+        </MudGrid>
+        <MudStack Row="true" Class="mt-3">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Refresh" OnClick="LoadReportData">
+                Generar Reporte
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.PictureAsPdf">
+                Exportar PDF
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.FileCopy">
+                Exportar Excel
+            </MudButton>
+        </MudStack>
+    </MudPaper>
+    
+    @switch (ReportType)
+    {
+        case "income-statement":
+            <IncomeStatementReport Data="@reportData" />
+            break;
+        case "balance-sheet":
+            <BalanceSheetReport Data="@reportData" />
+            break;
+        case "cash-flow":
+            <CashFlowReport Data="@reportData" />
+            break;
+        case "general-ledger":
+            <GeneralLedgerReport Data="@reportData" />
+            break;
+        case "accounts-receivable":
+            <AccountsReceivableReport Data="@reportData" />
+            break;
+        case "accounts-payable":
+            <AccountsPayableReport Data="@reportData" />
+            break;
+        case "inventory":
+            <InventoryReport Data="@reportData" />
+            break;
+        case "payroll-report":
+            <PayrollReport Data="@reportData" />
+            break;
+    }
+}
+
+@code {
+    [Parameter]
+    public string? ReportType { get; set; }
+    
+    private DateTime? startDate = DateTime.Now.AddMonths(-1);
+    private DateTime? endDate = DateTime.Now;
+    private object? reportData;
+    
+    private void NavigateTo(string report)
+    {
+        Navigation.NavigateTo($"/reports/{report}");
+    }
+    
+    private void BackToReports()
+    {
+        Navigation.NavigateTo("/reports");
+    }
+    
+    private string GetReportTitle() => ReportType switch
+    {
+        "income-statement" => "Estado de Resultados",
+        "balance-sheet" => "Balance General",
+        "cash-flow" => "Flujo de Caja",
+        "general-ledger" => "Libro Mayor",
+        "accounts-receivable" => "Cuentas por Cobrar",
+        "accounts-payable" => "Cuentas por Pagar",
+        "inventory" => "Inventario",
+        "payroll-report" => "Nómina",
+        _ => "Reporte"
+    };
+    
+    private async Task LoadReportData()
+    {
+        Snackbar.Add($"Generando reporte de {GetReportTitle()}...", Severity.Info);
+        await Task.Delay(500);
+    }
+}
+
+@* Income Statement Report *@
+@if (ReportType == "income-statement")
+{
+    <MudPaper Elevation="2" Style="border-radius: 16px;" Class="pa-4">
+        <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Ingresos</MudText>
+        <MudSimpleTable Dense="true">
+            <thead>
+                <tr>
+                    <th>Cuenta</th>
+                    <th style="text-align: right;">Este Mes</th>
+                    <th style="text-align: right;">Año Anterior</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ventas de Productos</td>
+                    <td style="text-align: right;">$45,000.00</td>
+                    <td style="text-align: right;">$38,500.00</td>
+                </tr>
+                <tr>
+                    <td>Servicios Prestados</td>
+                    <td style="text-align: right;">$12,500.00</td>
+                    <td style="text-align: right;">$10,200.00</td>
+                </tr>
+                <tr style="font-weight: 600;">
+                    <td>Total Ingresos</td>
+                    <td style="text-align: right; color: #10b981;">$57,500.00</td>
+                    <td style="text-align: right; color: #10b981;">$48,700.00</td>
+                </tr>
+            </tbody>
+        </MudSimpleTable>
+        
+        <MudDivider Class="my-4" />
+        
+        <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Gastos</MudText>
+        <MudSimpleTable Dense="true">
+            <thead>
+                <tr>
+                    <th>Cuenta</th>
+                    <th style="text-align: right;">Este Mes</th>
+                    <th style="text-align: right;">Año Anterior</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Costos de Ventas</td>
+                    <td style="text-align: right;">$28,500.00</td>
+                    <td style="text-align: right;">$24,000.00</td>
+                </tr>
+                <tr>
+                    <td>Gastos de Operación</td>
+                    <td style="text-align: right;">$8,200.00</td>
+                    <td style="text-align: right;">$7,500.00</td>
+                </tr>
+                <tr>
+                    <td>Gastos Administrativos</td>
+                    <td style="text-align: right;">$5,800.00</td>
+                    <td style="text-align: right;">$5,200.00</td>
+                </tr>
+                <tr>
+                    <td>Gastos de Ventas</td>
+                    <td style="text-align: right;">$3,500.00</td>
+                    <td style="text-align: right;">$3,000.00</td>
+                </tr>
+                <tr style="font-weight: 600;">
+                    <td>Total Gastos</td>
+                    <td style="text-align: right; color: #dc2626;">$46,000.00</td>
+                    <td style="text-align: right; color: #dc2626;">$39,700.00</td>
+                </tr>
+            </tbody>
+        </MudSimpleTable>
+        
+        <MudDivider Class="my-4" />
+        
+        <MudAlert Severity="@(true ? Severity.Success : Severity.Error)" Dense="true">
+            <MudStack Row="true" Justify="Justify.SpaceBetween">
+                <MudText Style="font-weight: 700;">UTILIDAD NETA</MudText>
+                <MudText Style="font-weight: 700; font-size: 1.25rem;">$11,500.00</MudText>
+            </MudStack>
+        </MudAlert>
+    </MudPaper>
+}
+
+@* Balance Sheet Report *@
+@if (ReportType == "balance-sheet")
+{
+    <MudGrid>
+        <MudItem xs="12" md="6">
+            <MudPaper Elevation="2" Style="border-radius: 16px;" Class="pa-4">
+                <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Activos</MudText>
+                <MudSimpleTable Dense="true">
+                    <tbody>
+                        <tr>
+                            <td colspan="2" style="font-weight: 600;">Activos Circulantes</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px;">Efectivo y Equivalentes</td>
+                            <td style="text-align: right;">$45,230.00</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px;">Cuentas por Cobrar</td>
+                            <td style="text-align: right;">$28,500.00</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px;">Inventario</td>
+                            <td style="text-align: right;">$15,750.00</td>
+                        </tr>
+                        <tr style="font-weight: 600;">
+                            <td>Total Activos Circulantes</td>
+                            <td style="text-align: right;">$89,480.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="font-weight: 600;">Activos Fijos</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px;">Equipo de Oficina</td>
+                            <td style="text-align: right;">$12,500.00</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px;">Depreciación Acumulada</td>
+                            <td style="text-align: right;">($3,125.00)</td>
+                        </tr>
+                        <tr style="font-weight: 600; background: rgba(0,0,0,0.02);">
+                            <td>TOTAL ACTIVOS</td>
+                            <td style="text-align: right; color: #10b981;">$98,855.00</td>
+                        </tr>
+                    </tbody>
+                </MudSimpleTable>
+            </MudPaper>
+        </MudItem>
+        
+        <MudItem xs="12" md="6">
+            <MudPaper Elevation="2" Style="border-radius: 16px;" Class="pa-4">
+                <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Pasivos y Patrimonio</MudText>
+                <MudSimpleTable Dense="true">
+                    <tbody>
+                        <tr>
+                            <td colspan="2" style="font-weight: 600;">Pasivos Circulantes</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px;">Cuentas por Pagar</td>
+                            <td style="text-align: right;">$18,250.00</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px;">Gastos Acumulados</td>
+                            <td style="text-align: right;">$5,800.00</td>
+                        </tr>
+                        <tr style="font-weight: 600;">
+                            <td>Total Pasivos Circulantes</td>
+                            <td style="text-align: right;">$24,050.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="font-weight: 600;">Patrimonio</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px;">Capital Social</td>
+                            <td style="text-align: right;">$50,000.00</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px;">Utilidades Retenidas</td>
+                            <td style="text-align: right;">$13,305.00</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 20px;">Utilidad del Ejercicio</td>
+                            <td style="text-align: right;">$11,500.00</td>
+                        </tr>
+                        <tr style="font-weight: 600; background: rgba(0,0,0,0.02);">
+                            <td>TOTAL PASIVOS Y PATRIMONIO</td>
+                            <td style="text-align: right; color: #10b981;">$98,855.00</td>
+                        </tr>
+                    </tbody>
+                </MudSimpleTable>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+
+@* Cash Flow Report *@
+@if (ReportType == "cash-flow")
+{
+    <MudPaper Elevation="2" Style="border-radius: 16px;" Class="pa-4">
+        <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Flujo de Caja</MudText>
+        <MudSimpleTable Dense="true">
+            <tbody>
+                <tr style="font-weight: 600;">
+                    <td>ACTIVIDADES DE OPERACIÓN</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 20px;">Utilidad Neta</td>
+                    <td style="text-align: right;">$11,500.00</td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 20px;">+ Depreciación</td>
+                    <td style="text-align: right;">$500.00</td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 20px;">- Aumento en Cuentas por Cobrar</td>
+                    <td style="text-align: right;">($3,500.00)</td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 20px;">+ Aumento en Cuentas por Pagar</td>
+                    <td style="text-align: right;">$2,800.00</td>
+                </tr>
+                <tr style="font-weight: 600; background: rgba(16, 185, 129, 0.1);">
+                    <td>Flujo de Operación</td>
+                    <td style="text-align: right; color: #10b981;">$11,300.00</td>
+                </tr>
+                <tr style="font-weight: 600;">
+                    <td>ACTIVIDADES DE INVERSIÓN</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 20px;">- Compra de Equipo</td>
+                    <td style="text-align: right;">($2,500.00)</td>
+                </tr>
+                <tr style="font-weight: 600; background: rgba(220, 38, 38, 0.1);">
+                    <td>Flujo de Inversión</td>
+                    <td style="text-align: right; color: #dc2626;">($2,500.00)</td>
+                </tr>
+                <tr style="font-weight: 600;">
+                    <td>ACTIVIDADES DE FINANCIAMIENTO</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 20px;">+ Préstamo Bancario</td>
+                    <td style="text-align: right;">$5,000.00</td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 20px;">- Pago de Préstamo</td>
+                    <td style="text-align: right;">($1,000.00)</td>
+                </tr>
+                <tr style="font-weight: 600; background: rgba(16, 185, 129, 0.1);">
+                    <td>Flujo de Financiamiento</td>
+                    <td style="text-align: right; color: #10b981;">$4,000.00</td>
+                </tr>
+                <tr style="font-weight: 700; font-size: 1.1rem; background: rgba(37, 99, 235, 0.1);">
+                    <td>AUMENTO NETO EN EFECTIVO</td>
+                    <td style="text-align: right; color: #2563eb;">$12,800.00</td>
+                </tr>
+            </tbody>
+        </MudSimpleTable>
+    </MudPaper>
+}
+
+@* General Ledger Report *@
+@if (ReportType == "general-ledger")
+{
+    <MudPaper Elevation="2" Style="border-radius: 16px;" Class="pa-4">
+        <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Libro Mayor</MudText>
+        
+        <MudExpansionPanels>
+            <MudExpansionPanel Text="1-1000 Efectivo y Bancos" InitiallyExpanded="true">
+                <MudSimpleTable Dense="true" Hover="true">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Descripción</th>
+                            <th>Referencia</th>
+                            <th style="text-align: right;">Débito</th>
+                            <th style="text-align: right;">Crédito</th>
+                            <th style="text-align: right;">Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01/03/2026</td>
+                            <td>Saldo Inicial</td>
+                            <td></td>
+                            <td style="text-align: right;">$32,430.00</td>
+                            <td style="text-align: right;"></td>
+                            <td style="text-align: right;">$32,430.00</td>
+                        </tr>
+                        <tr>
+                            <td>05/03/2026</td>
+                            <td>Cobro Factura #001</td>
+                            <td>FAC-001</td>
+                            <td style="text-align: right;">$5,000.00</td>
+                            <td style="text-align: right;"></td>
+                            <td style="text-align: right;">$37,430.00</td>
+                        </tr>
+                        <tr>
+                            <td>10/03/2026</td>
+                            <td>Pago Proveedor</td>
+                            <td>CHK-101</td>
+                            <td style="text-align: right;"></td>
+                            <td style="text-align: right;">$3,200.00</td>
+                            <td style="text-align: right;">$34,230.00</td>
+                        </tr>
+                        <tr style="font-weight: 600;">
+                            <td colspan="5">Saldo Final</td>
+                            <td style="text-align: right;">$34,230.00</td>
+                        </tr>
+                    </tbody>
+                </MudSimpleTable>
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="1-2000 Cuentas por Cobrar">
+                <MudSimpleTable Dense="true">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Descripción</th>
+                            <th>Referencia</th>
+                            <th style="text-align: right;">Débito</th>
+                            <th style="text-align: right;">Crédito</th>
+                            <th style="text-align: right;">Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01/03/2026</td>
+                            <td>Saldo Inicial</td>
+                            <td></td>
+                            <td style="text-align: right;">$25,000.00</td>
+                            <td style="text-align: right;"></td>
+                            <td style="text-align: right;">$25,000.00</td>
+                        </tr>
+                        <tr>
+                            <td>15/03/2026</td>
+                            <td>Venta a Crédito</td>
+                            <td>FAC-005</td>
+                            <td style="text-align: right;">$8,500.00</td>
+                            <td style="text-align: right;"></td>
+                            <td style="text-align: right;">$33,500.00</td>
+                        </tr>
+                        <tr style="font-weight: 600;">
+                            <td colspan="5">Saldo Final</td>
+                            <td style="text-align: right;">$33,500.00</td>
+                        </tr>
+                    </tbody>
+                </MudSimpleTable>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </MudPaper>
+}
+
+@* Accounts Receivable Report *@
+@if (ReportType == "accounts-receivable")
+{
+    <MudPaper Elevation="2" Style="border-radius: 16px;" Class="pa-4">
+        <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Cuentas por Cobrar</MudText>
+        
+        <MudTable Items="@receivables" Dense="true" Hover="true">
+            <HeaderContent>
+                <MudTh>Cliente</MudTh>
+                <MudTh>Factura</MudTh>
+                <MudTh>Fecha</MudTh>
+                <MudTh>Vence</MudTh>
+                <MudTh style="text-align: right;">Monto</MudTh>
+                <MudTh>Días Venc.</MudTh>
+                <MudTh>Estado</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd Style="font-weight: 500;">@context.Client</MudTd>
+                <MudTd>@context.Invoice</MudTd>
+                <MudTd>@context.Date</MudTd>
+                <MudTd>@context.DueDate</MudTd>
+                <MudTd Style="text-align: right;">$@context.Amount.ToString("N2")</MudTd>
+                <MudTd>
+                    <MudChip T="string" Size="Size.Small" Color="@(context.DaysOverdue > 30 ? Color.Error : context.DaysOverdue > 0 ? Color.Warning : Color.Success)">
+                        @context.DaysOverdue
+                    </MudChip>
+                </MudTd>
+                <MudTd>@context.Status</MudTd>
+            </RowTemplate>
+        </MudTable>
+        
+        <MudDivider Class="my-4" />
+        
+        <MudGrid>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Por Cobrar</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #10b981;">$28,500.00</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(245, 158, 11, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Vencido</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #f59e0b;">$5,200.00</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(220, 38, 38, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Más de 30 días</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #dc2626;">$2,800.00</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(37, 99, 235, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Total Clientes</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #2563eb;">8</MudText>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+}
+
+@* Accounts Payable Report *@
+@if (ReportType == "accounts-payable")
+{
+    <MudPaper Elevation="2" Style="border-radius: 16px;" Class="pa-4">
+        <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Cuentas por Pagar</MudText>
+        
+        <MudTable Items="@payables" Dense="true" Hover="true">
+            <HeaderContent>
+                <MudTh>Proveedor</MudTh>
+                <MudTh>Factura</MudTh>
+                <MudTh>Fecha</MudTh>
+                <MudTh>Vence</MudTh>
+                <MudTh style="text-align: right;">Monto</MudTh>
+                <MudTh>Días Venc.</MudTh>
+                <MudTh>Estado</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd Style="font-weight: 500;">@context.Provider</MudTd>
+                <MudTd>@context.Invoice</MudTd>
+                <MudTd>@context.Date</MudTd>
+                <MudTd>@context.DueDate</MudTd>
+                <MudTd Style="text-align: right;">$@context.Amount.ToString("N2")</MudTd>
+                <MudTd>
+                    <MudChip T="string" Size="Size.Small" Color="@(context.DaysOverdue > 30 ? Color.Error : context.DaysOverdue > 0 ? Color.Warning : Color.Success)">
+                        @context.DaysOverdue
+                    </MudChip>
+                </MudTd>
+                <MudTd>@context.Status</MudTd>
+            </RowTemplate>
+        </MudTable>
+        
+        <MudDivider Class="my-4" />
+        
+        <MudGrid>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(220, 38, 38, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Por Pagar</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #dc2626;">$18,250.00</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(245, 158, 11, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Vencido</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #f59e0b;">$3,500.00</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Por Vencer</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #10b981;">$14,750.00</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(37, 99, 235, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Total Proveedores</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #2563eb;">5</MudText>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+}
+
+@* Inventory Report *@
+@if (ReportType == "inventory")
+{
+    <MudPaper Elevation="2" Style="border-radius: 16px;" Class="pa-4">
+        <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Inventario</MudText>
+        
+        <MudTable Items="@inventory" Dense="true" Hover="true">
+            <HeaderContent>
+                <MudTh>Código</MudTh>
+                <MudTh>Producto</MudTh>
+                <MudTh>Categoría</MudTh>
+                <MudTh style="text-align: right;">Stock</MudTh>
+                <MudTh style="text-align: right;">Costo</MudTh>
+                <MudTh style="text-align: right;">Valor Total</MudTh>
+                <MudTh>Estado</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Code</MudTd>
+                <MudTd Style="font-weight: 500;">@context.Name</MudTd>
+                <MudTd>@context.Category</MudTd>
+                <MudTd Style="text-align: right;">@context.Stock</MudTd>
+                <MudTd Style="text-align: right;">$@context.Cost.ToString("N2")</MudTd>
+                <MudTd Style="text-align: right;">$@context.TotalValue.ToString("N2")</MudTd>
+                <MudTd>
+                    <MudChip T="string" Size="Size.Small" Color="@context.StatusColor" Variant="Variant.Filled">
+                        @context.Status
+                    </MudChip>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+        
+        <MudDivider Class="my-4" />
+        
+        <MudGrid>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(37, 99, 235, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Total Productos</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #2563eb;">45</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">En Stock</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #10b981;">38</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(245, 158, 11, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Stock Bajo</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #f59e0b;">5</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(220, 38, 38, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Valor Total</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #dc2626;">$15,750.00</MudText>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+}
+
+@* Payroll Report *@
+@if (ReportType == "payroll-report")
+{
+    <MudPaper Elevation="2" Style="border-radius: 16px;" Class="pa-4">
+        <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Nómina - Marzo 2026</MudText>
+        
+        <MudTable Items="@employeesPayroll" Dense="true" Hover="true">
+            <HeaderContent>
+                <MudTh>Empleado</MudTh>
+                <MudTh>Cargo</MudTh>
+                <MudTh style="text-align: right;">Salario Base</MudTh>
+                <MudTh style="text-align: right;">Deducciones</MudTh>
+                <MudTh style="text-align: right;">Bonificaciones</MudTh>
+                <MudTh style="text-align: right;">Neto a Pagar</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd Style="font-weight: 500;">@context.Name</MudTd>
+                <MudTd>@context.Position</MudTd>
+                <MudTd Style="text-align: right;">$@context.BaseSalary.ToString("N2")</MudTd>
+                <MudTd Style="text-align: right; color: #dc2626;">-$@context.Deductions.ToString("N2")</MudTd>
+                <MudTd Style="text-align: right; color: #10b981;">+$@context.Bonuses.ToString("N2")</MudTd>
+                <MudTd Style="text-align: right; font-weight: 700;">$@context.NetPay.ToString("N2")</MudTd>
+            </RowTemplate>
+        </MudTable>
+        
+        <MudDivider Class="my-4" />
+        
+        <MudGrid>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(37, 99, 235, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Total Empleados</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #2563eb;">12</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(16, 185, 129, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Nómina Bruta</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #10b981;">$18,500.00</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(220, 38, 38, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Deducciones</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #dc2626;">$2,420.00</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" md="3">
+                <MudPaper Elevation="0" Class="pa-3" Style="background: rgba(37, 99, 235, 0.1); border-radius: 8px;">
+                    <MudText Typo="Typo.caption">Neto a Pagar</MudText>
+                    <MudText Typo="Typo.h5" Style="font-weight: 700; color: #2563eb;">$16,080.00</MudText>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+}
+
+@code {
+    private List<Receivable> receivables = new()
+    {
+        new() { Client = "Empresa ABC", Invoice = "FAC-001", Date = "10/03/2026", DueDate = "25/03/2026", Amount = 5500, DaysOverdue = 0, Status = "Por Vencer" },
+        new() { Client = "Corporación XYZ", Invoice = "FAC-002", Date = "05/03/2026", DueDate = "20/03/2026", Amount = 8200, DaysOverdue = 5, Status = "Vencido" },
+        new() { Client = "Industrias 123", Invoice = "FAC-003", Date = "01/03/2026", DueDate = "15/03/2026", Amount = 3500, DaysOverdue = 10, Status = "Vencido" },
+        new() { Client = "Servicios Generales", Invoice = "FAC-004", Date = "20/02/2026", DueDate = "05/03/2026", Amount = 2800, DaysOverdue = 35, Status = "Vencido" },
+        new() { Client = "Comercial Panameña", Invoice = "FAC-005", Date = "15/03/2026", DueDate = "30/03/2026", Amount = 6500, DaysOverdue = 0, Status = "Por Vencer" }
+    };
+    
+    private List<Payable> payables = new()
+    {
+        new() { Provider = "Proveedor Principal", Invoice = "FAC-001", Date = "10/03/2026", DueDate = "25/03/2026", Amount = 4500, DaysOverdue = 0, Status = "Por Vencer" },
+        new() { Provider = "Suministros del Norte", Invoice = "FAC-002", Date = "05/03/2026", DueDate = "20/03/2026", Amount = 3200, DaysOverdue = 5, Status = "Vencido" },
+        new() { Provider = "Materiales Industriales", Invoice = "FAC-003", Date = "01/03/2026", DueDate = "15/03/2026", Amount = 2800, DaysOverdue = 10, Status = "Vencido" },
+        new() { Provider = "Servicios Técnicos", Invoice = "FAC-004", Date = "20/02/2026", DueDate = "05/03/2026", Amount = 1750, DaysOverdue = 35, Status = "Vencido" },
+        new() { Provider = "Tecnología Avanzada", Invoice = "FAC-005", Date = "15/03/2026", DueDate = "30/03/2026", Amount = 6000, DaysOverdue = 0, Status = "Por Vencer" }
+    };
+    
+    private List<InventoryItem> inventory = new()
+    {
+        new() { Code = "PROD-001", Name = "Laptop Dell XPS 15", Category = "Electrónica", Stock = 15, Cost = 850, TotalValue = 12750, Status = "En Stock", StatusColor = Color.Success },
+        new() { Code = "PROD-002", Name = "Monitor LG 27\"", Category = "Electrónica", Stock = 8, Cost = 250, TotalValue = 2000, Status = "Stock Bajo", StatusColor = Color.Warning },
+        new() { Code = "PROD-003", Name = "Teclado Mecánico", Category = "Accesorios", Stock = 25, Cost = 50, TotalValue = 1250, Status = "En Stock", StatusColor = Color.Success }
+    };
+    
+    private List<EmployeePayroll> employeesPayroll = new()
+    {
+        new() { Name = "Juan Pérez", Position = "Gerente", BaseSalary = 2500, Deductions = 350, Bonuses = 200, NetPay = 2350 },
+        new() { Name = "María González", Position = "Contadora", BaseSalary = 1800, Deductions = 220, Bonuses = 150, NetPay = 1730 },
+        new() { Name = "Carlos López", Position = "Asistente", BaseSalary = 1200, Deductions = 130, Bonuses = 100, NetPay = 1170 },
+        new() { Name = "Ana Rodríguez", Position = "Secretaria", BaseSalary = 900, Deductions = 90, Bonuses = 50, NetPay = 860 }
+    };
+    
+    class Receivable
+    {
+        public string Client { get; set; } = "";
+        public string Invoice { get; set; } = "";
+        public string Date { get; set; } = "";
+        public string DueDate { get; set; } = "";
+        public decimal Amount { get; set; }
+        public int DaysOverdue { get; set; }
+        public string Status { get; set; } = "";
+    }
+    
+    class Payable
+    {
+        public string Provider { get; set; } = "";
+        public string Invoice { get; set; } = "";
+        public string Date { get; set; } = "";
+        public string DueDate { get; set; } = "";
+        public decimal Amount { get; set; }
+        public int DaysOverdue { get; set; }
+        public string Status { get; set; } = "";
+    }
+    
+    class InventoryItem
+    {
+        public string Code { get; set; } = "";
+        public string Name { get; set; } = "";
+        public string Category { get; set; } = "";
+        public int Stock { get; set; }
+        public decimal Cost { get; set; }
+        public decimal TotalValue { get; set; }
+        public string Status { get; set; } = "";
+        public Color StatusColor { get; set; }
+    }
+    
+    class EmployeePayroll
+    {
+        public string Name { get; set; } = "";
+        public string Position { get; set; } = "";
+        public decimal BaseSalary { get; set; }
+        public decimal Deductions { get; set; }
+        public decimal Bonuses { get; set; }
+        public decimal NetPay { get; set; }
+    }
+}
+
+<style>
+    .report-card:hover {
+        transform: translateY(-4px);
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+</style>

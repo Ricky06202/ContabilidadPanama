@@ -1,0 +1,94 @@
+@page "/payroll"
+@inject ApiService Api
+@inject ISnackbar Snackbar
+
+<PageTitle>Nómina - ContabilidadPanama</PageTitle>
+
+<MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mb-4">Nómina</MudText>
+
+<MudGrid>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Total Empleados</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700;">12</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Nómina Mes</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700;">$18,500.00</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Pendiente</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700; color: #f59e0b;">2</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Préstamos</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700;">$5,200.00</MudText>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<MudPaper Elevation="2" Style="border-radius: 16px;" Class="mt-4">
+    <MudToolBar Class="pa-3">
+        <MudText Typo="Typo.h6">Lista de Empleados</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add">
+            Nuevo Empleado
+        </MudButton>
+    </MudToolBar>
+
+    <MudTable Items="@employees" Dense="true" Hover="true" Striped="true" Elevation="0">
+        <HeaderContent>
+            <MudTh>Cédula</MudTh>
+            <MudTh>Nombre</MudTh>
+            <MudTh>Cargo</MudTh>
+            <MudTh>Salario</MudTh>
+            <MudTh>Estado</MudTh>
+            <MudTh Style="text-align: center;">Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.IdentityCard</MudTd>
+            <MudTd Style="font-weight: 500;">@context.Name</MudTd>
+            <MudTd>
+                <MudChip T="string" Size="Size.Small" Color="Color.Default" Variant="Variant.Outlined">
+                    @context.Position
+                </MudChip>
+            </MudTd>
+            <MudTd Style="font-weight: 600;">$@context.Salary.ToString("N2")</MudTd>
+            <MudTd>
+                <MudChip T="string" Size="Size.Small" Color="@(context.Status == "Activo" ? Color.Success : Color.Warning)" Variant="Variant.Filled">
+                    @context.Status
+                </MudChip>
+            </MudTd>
+            <MudTd Style="text-align: center;">
+                <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Primary" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+</MudPaper>
+
+@code {
+    private List<EmployeeDto> employees = new()
+    {
+        new() { Id = 1, IdentityCard = "8-890-1234", Name = "Juan Pérez", Position = "Gerente", Salary = 2500.00m, Status = "Activo" },
+        new() { Id = 2, IdentityCard = "3-700-5678", Name = "María González", Position = "Contadora", Salary = 1800.00m, Status = "Activo" },
+        new() { Id = 3, IdentityCard = "4-100-9012", Name = "Carlos López", Position = "Asistente", Salary = 1200.00m, Status = "Activo" },
+        new() { Id = 4, IdentityCard = "8-750-3456", Name = "Ana Rodríguez", Position = "Secretaria", Salary = 900.00m, Status = "Inactivo" }
+    };
+
+    public class EmployeeDto
+    {
+        public int Id { get; set; }
+        public string IdentityCard { get; set; } = "";
+        public string Name { get; set; } = "";
+        public string Position { get; set; } = "";
+        public decimal Salary { get; set; }
+        public string Status { get; set; } = "";
+    }
+}

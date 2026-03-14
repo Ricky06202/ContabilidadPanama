@@ -1,190 +1,277 @@
 @page "/dashboard"
+@inject ApiService Api
+@inject NavigationManager Navigation
 
 <PageTitle>Dashboard - ContabilidadPanama</PageTitle>
 
-<div class="dashboard-container">
-    <!-- Header del Dashboard -->
-    <MudPaper Elevation="0" Class="pa-4 mb-6" Style="background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); border-radius: 12px;">
-        <MudGrid Justify="Justify.SpaceBetween" Class="align-center">
-            <MudItem>
-                <MudText Typo="Typo.h5" Style="font-weight: 700; color: white;">
-                    Dashboard Financiero
-                </MudText>
-                <MudText Typo="Typo.body2" Style="color: rgba(255,255,255,0.8);">
-                    Panorama general de tu negocio
-                </MudText>
-            </MudItem>
-            <MudItem>
-                <MudButton Variant="Variant.Filled" Color="Color.Default" StartIcon="@Icons.Material.Filled.Add">
-                    Nueva Transacción
+<MudGrid>
+    <!-- Header con gradiente -->
+    <MudItem xs="12">
+        <MudPaper Elevation="0" Class="pa-5" Style="background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%); border-radius: 16px;">
+            <MudGrid AlignItems="AlignItems.Center">
+                <MudItem xs="12" md="8">
+                    <MudText Typo="Typo.h4" Style="font-weight: 700; color: white;">
+                        Hola, Bienvenido de nuevo
+                    </MudText>
+                    <MudText Typo="Typo.body1" Style="color: rgba(255,255,255,0.85);" Class="mt-1">
+                        Aquí está el resumen de tu negocio hoy
+                    </MudText>
+                </MudItem>
+                <MudItem xs="12" md="4" Class="d-flex justify-end">
+                    <MudButton Variant="Variant.Filled" 
+                              Color="Color.Default" 
+                              Size="Size.Large"
+                              StartIcon="@Icons.Material.Filled.Add"
+                              OnClick="@(() => Navigation.NavigateTo("/invoices/new"))"
+                              Class="white-btn">
+                        Nueva Factura
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<!-- KPIs Cards -->
+<MudGrid Class="mt-4">
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Class="pa-4 kpi-card" Style="border-radius: 16px; border-left: 4px solid #2563EB;">
+            <div class="d-flex justify-space-between align-center">
+                <div>
+                    <MudText Typo="Typo.body2" Color="Color.Default">Clientes</MudText>
+                    <MudText Typo="Typo.h4" Style="font-weight: 700;">@dashboard?.TotalClientes</MudText>
+                </div>
+                <MudAvatar Color="Color.Primary" Size="Size.Large">
+                    <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Medium" />
+                </MudAvatar>
+            </div>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Class="pa-4 kpi-card" Style="border-radius: 16px; border-left: 4px solid #10B981;">
+            <div class="d-flex justify-space-between align-center">
+                <div>
+                    <MudText Typo="Typo.body2" Color="Color.Default">Ventas del Mes</MudText>
+                    <MudText Typo="Typo.h4" Style="font-weight: 700; color: #10B981;">
+                        @FormatCurrency(dashboard?.VentasMes ?? 0)
+                    </MudText>
+                </div>
+                <MudAvatar Color="Color.Success" Size="Size.Large">
+                    <MudIcon Icon="@Icons.Material.Filled.TrendingUp" Size="Size.Medium" />
+                </MudAvatar>
+            </div>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Class="pa-4 kpi-card" Style="border-radius: 16px; border-left: 4px solid #EF4444;">
+            <div class="d-flex justify-space-between align-center">
+                <div>
+                    <MudText Typo="Typo.body2" Color="Color.Default">Gastos del Mes</MudText>
+                    <MudText Typo="Typo.h4" Style="font-weight: 700; color: #EF4444;">
+                        @FormatCurrency(dashboard?.GastosMes ?? 0)
+                    </MudText>
+                </div>
+                <MudAvatar Color="Color.Error" Size="Size.Large">
+                    <MudIcon Icon="@Icons.Material.Filled.TrendingDown" Size="Size.Medium" />
+                </MudAvatar>
+            </div>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Class="pa-4 kpi-card" Style="border-radius: 16px; border-left: 4px solid #7C3AED;">
+            <div class="d-flex justify-space-between align-center">
+                <div>
+                    <MudText Typo="Typo.body2" Color="Color.Default">En Bancos</MudText>
+                    <MudText Typo="Typo.h4" Style="font-weight: 700; color: #7C3AED;">
+                        @FormatCurrency(dashboard?.BancosTotal ?? 0)
+                    </MudText>
+                </div>
+                <MudAvatar Color="Color.Secondary" Size="Size.Large">
+                    <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Medium" />
+                </MudAvatar>
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<!-- Segunda fila: Gráficos y tablas -->
+<MudGrid Class="mt-2">
+    <!-- Resumen de Productos -->
+    <MudItem xs="12" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="border-radius: 16px; height: 100%;">
+            <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">
+                Inventario
+            </MudText>
+            <MudStack Spacing="3">
+                <div class="d-flex justify-space-between align-center">
+                    <MudText>Productos</MudText>
+                    <MudChip T="int" Color="Color.Primary" Size="Size.Small">@dashboard?.TotalProductos</MudChip>
+                </div>
+                <div class="d-flex justify-space-between align-center">
+                    <MudText>Proveedores</MudText>
+                    <MudChip T="int" Color="Color.Warning" Size="Size.Small">@dashboard?.TotalProveedores</MudChip>
+                </div>
+                <div class="d-flex justify-space-between align-center">
+                    <MudText>Empleados</MudText>
+                    <MudChip T="int" Color="Color.Secondary" Size="Size.Small">@dashboard?.TotalEmpleados</MudChip>
+                </div>
+            </MudStack>
+            
+            <MudDivider Class="my-4" />
+            
+            <MudButton Variant="Variant.Outlined" 
+                      Color="Color.Primary" 
+                      FullWidth="true"
+                      OnClick="@(() => Navigation.NavigateTo("/products"))">
+                Ver Inventario
+            </MudButton>
+        </MudPaper>
+    </MudItem>
+
+    <!-- Acciones Rápidas -->
+    <MudItem xs="12" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="border-radius: 16px; height: 100%;">
+            <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">
+                Acciones Rápidas
+            </MudText>
+            <MudStack Spacing="2">
+                <MudButton Variant="Variant.Filled" 
+                          Color="Color.Primary" 
+                          FullWidth="true"
+                          StartIcon="@Icons.Material.Filled.Description"
+                          OnClick="@(() => Navigation.NavigateTo("/invoices/new"))">
+                    Nueva Factura
                 </MudButton>
-            </MudItem>
-        </MudGrid>
-    </MudPaper>
+                <MudButton Variant="Variant.Outlined" 
+                          Color="Color.Primary" 
+                          FullWidth="true"
+                          StartIcon="@Icons.Material.Filled.PersonAdd"
+                          OnClick="@(() => Navigation.NavigateTo("/clients/new"))">
+                    Nuevo Cliente
+                </MudButton>
+                <MudButton Variant="Variant.Outlined" 
+                          Color="Color.Primary" 
+                          FullWidth="true"
+                          StartIcon="@Icons.Material.Filled.Payments"
+                          OnClick="@(() => Navigation.NavigateTo("/expenses/new"))">
+                    Registrar Gasto
+                </MudButton>
+                <MudButton Variant="Variant.Outlined" 
+                          Color="Color.Primary" 
+                          FullWidth="true"
+                          StartIcon="@Icons.Material.Filled.Analytics"
+                          OnClick="@(() => Navigation.NavigateTo("/reports"))">
+                    Ver Reportes
+                </MudButton>
+            </MudStack>
+        </MudPaper>
+    </MudItem>
 
-    <!-- Resumen Financiero -->
-    <MudGrid Class="mb-6">
-        <MudItem xs="12" sm="6" md="3">
-            <MudCard Elevation="4" Class="rounded-xl">
-                <MudCardContent>
-                    <MudText Typo="Typo.body2" Color="Color.Secondary">Saldo Total</MudText>
-                    <MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mt-2">$15,420.50</MudText>
-                    <MudChip T="string" Size="Size.Small" Color="Color.Success" Class="mt-2">
-                        +2.5% vs mes anterior
-                    </MudChip>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-
-        <MudItem xs="12" sm="6" md="3">
-            <MudCard Elevation="4" Class="rounded-xl">
-                <MudCardContent>
-                    <MudText Typo="Typo.body2" Color="Color.Success">Ingresos (Mes)</MudText>
-                    <MudText Typo="Typo.h4" Style="font-weight: 700; color: #16a34a;" Class="mt-2">$28,500.00</MudText>
-                    <MudText Typo="Typo.caption" Color="Color.Secondary">
-                        45 facturas emitidas
+    <!-- Estado Financiero -->
+    <MudItem xs="12" md="4">
+        <MudPaper Elevation="2" Class="pa-4" Style="border-radius: 16px; height: 100%;">
+            <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">
+                Resumen del Mes
+            </MudText>
+            
+            <div class="financial-summary">
+                <div class="summary-item">
+                    <div class="d-flex justify-space-between mb-1">
+                        <MudText Color="Color.Default">Ingresos</MudText>
+                        <MudText Style="font-weight: 600; color: #10B981;">
+                            +@FormatCurrency(dashboard?.VentasMes ?? 0)
+                        </MudText>
+                    </div>
+                    <MudProgressBar Color="Color.Success" Value="100" />
+                </div>
+                
+                <div class="summary-item mt-4">
+                    <div class="d-flex justify-space-between mb-1">
+                        <MudText Color="Color.Default">Gastos</MudText>
+                        <MudText Style="font-weight: 600; color: #EF4444;">
+                            -@FormatCurrency(dashboard?.GastosMes ?? 0)
+                        </MudText>
+                    </div>
+                    <MudProgressBar Color="Color.Error" Value="100" />
+                </div>
+                
+                <MudDivider Class="my-4" />
+                
+                <div class="d-flex justify-space-between align-center">
+                    <MudText Style="font-weight: 600;">Balance</MudText>
+                    <MudText Typo="Typo.h6" Style="@($"font-weight: 700; color: {GetBalanceColor()}")">
+                        @FormatCurrency((dashboard?.VentasMes ?? 0) - (dashboard?.GastosMes ?? 0))
                     </MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-
-        <MudItem xs="12" sm="6" md="3">
-            <MudCard Elevation="4" Class="rounded-xl">
-                <MudCardContent>
-                    <MudText Typo="Typo.body2" Color="Color.Error">Egresos (Mes)</MudText>
-                    <MudText Typo="Typo.h4" Style="font-weight: 700; color: #dc2626;" Class="mt-2">$18,250.00</MudText>
-                    <MudText Typo="Typo.caption" Color="Color.Secondary">
-                        23 gastos registrados
-                    </MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-
-        <MudItem xs="12" sm="6" md="3">
-            <MudCard Elevation="4" Class="rounded-xl">
-                <MudCardContent>
-                    <MudText Typo="Typo.body2" Color="Color.Info">Por Cobrar</MudText>
-                    <MudText Typo="Typo.h4" Style="font-weight: 700; color: #2563eb;" Class="mt-2">$5,200.00</MudText>
-                    <MudText Typo="Typo.caption" Color="Color.Secondary">
-                        8 clientes pendientes
-                    </MudText>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-    </MudGrid>
-
-    <!-- Gráficos y Tablas -->
-    <MudGrid>
-        <!-- Transacciones Recientes -->
-        <MudItem xs="12" md="8">
-            <MudCard Elevation="4" Class="rounded-xl">
-                <MudCardHeader>
-                    <MudText Typo="Typo.h6" Style="font-weight: 600;">Transacciones Recientes</MudText>
-                    <MudSpacer />
-                    <MudButton Variant="Variant.Text" Color="Color.Primary">Ver todas</MudButton>
-                </MudCardHeader>
-                <MudCardContent>
-                    <MudSimpleTable Elevation="0">
-                        <thead>
-                            <tr>
-                                <th style="font-weight: 600;">Fecha</th>
-                                <th style="font-weight: 600;">Descripción</th>
-                                <th style="font-weight: 600;">Categoría</th>
-                                <th style="font-weight: 600;">Tipo</th>
-                                <th style="font-weight: 600; text-align: right;">Monto</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>12/03/2026</td>
-                                <td>Venta de servicios consultoría</td>
-                                <td><MudChip T="string" Size="Size.Small" Color="Color.Info">Servicios</MudChip></td>
-                                <td><MudIcon Icon="@Icons.Material.Filled.ArrowDownward" Color="Color.Success" Size="Size.Small" /></td>
-                                <td style="text-align: right; color: #16a34a; font-weight: 600;">$1,500.00</td>
-                            </tr>
-                            <tr>
-                                <td>11/03/2026</td>
-                                <td>Pago de energía eléctrica</td>
-                                <td><MudChip T="string" Size="Size.Small" Color="Color.Warning">Servicios Públicos</MudChip></td>
-                                <td><MudIcon Icon="@Icons.Material.Filled.ArrowUpward" Color="Color.Error" Size="Size.Small" /></td>
-                                <td style="text-align: right; color: #dc2626; font-weight: 600;">$85.50</td>
-                            </tr>
-                            <tr>
-                                <td>10/03/2026</td>
-                                <td>Compra de equipo de oficina</td>
-                                <td><MudChip T="string" Size="Size.Small" Color="Color.Secondary">Equipos</MudChip></td>
-                                <td><MudIcon Icon="@Icons.Material.Filled.ArrowUpward" Color="Color.Error" Size="Size.Small" /></td>
-                                <td style="text-align: right; color: #dc2626; font-weight: 600;">$250.75</td>
-                            </tr>
-                            <tr>
-                                <td>09/03/2026</td>
-                                <td>Pago de nómina</td>
-                                <td><MudChip T="string" Size="Size.Small" Color="Color.Error">Nómina</MudChip></td>
-                                <td><MudIcon Icon="@Icons.Material.Filled.ArrowUpward" Color="Color.Error" Size="Size.Small" /></td>
-                                <td style="text-align: right; color: #dc2626; font-weight: 600;">$1,200.00</td>
-                            </tr>
-                        </tbody>
-                    </MudSimpleTable>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-
-        <!-- Panel Lateral -->
-        <MudItem xs="12" md="4">
-            <!-- Facturas Pendientes -->
-            <MudCard Elevation="4" Class="rounded-xl mb-4">
-                <MudCardHeader>
-                    <MudText Typo="Typo.h6" Style="font-weight: 600;">Facturas Pendientes</MudText>
-                </MudCardHeader>
-                <MudCardContent>
-                    <MudStack Spacing="2">
-                        <MudPaper Elevation="0" Class="pa-3" Style="background-color: #fef3c7;">
-                            <div class="d-flex justify-space-between align-center">
-                                <MudText Typo="Typo.body2">Cliente A</MudText>
-                                <MudText Typo="Typo.body2" Style="font-weight: 600;">$1,200.00</MudText>
-                            </div>
-                            <MudText Typo="Typo.caption" Color="Color.Secondary">Vence: 15/03/2026</MudText>
-                        </MudPaper>
-                        <MudPaper Elevation="0" Class="pa-3" Style="background-color: #fef3c7;">
-                            <div class="d-flex justify-space-between align-center">
-                                <MudText Typo="Typo.body2">Cliente B</MudText>
-                                <MudText Typo="Typo.body2" Style="font-weight: 600;">$850.00</MudText>
-                            </div>
-                            <MudText Typo="Typo.caption" Color="Color.Secondary">Vence: 18/03/2026</MudText>
-                        </MudPaper>
-                    </MudStack>
-                </MudCardContent>
-            </MudCard>
-
-            <!-- Acciones Rápidas -->
-            <MudCard Elevation="4" Class="rounded-xl">
-                <MudCardHeader>
-                    <MudText Typo="Typo.h6" Style="font-weight: 600;">Acciones Rápidas</MudText>
-                </MudCardHeader>
-                <MudCardContent>
-                    <MudStack Spacing="2">
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.AddCircle">
-                            Nueva Factura
-                        </MudButton>
-                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Receipt">
-                            Registrar Gasto
-                        </MudButton>
-                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.People">
-                            Nuevo Cliente
-                        </MudButton>
-                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Description">
-                            Reporte Mensual
-                        </MudButton>
-                    </MudStack>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-    </MudGrid>
-</div>
+                </div>
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 
 @code {
+    private DashboardData? dashboard;
+    private bool isLoading = true;
+
     protected override async Task OnInitializedAsync()
     {
-        await Task.CompletedTask;
+        await LoadDashboard();
+    }
+
+    private async Task LoadDashboard()
+    {
+        isLoading = true;
+        try
+        {
+            dashboard = await Api.GetAsync<DashboardData>("/dashboard");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading dashboard: {ex.Message}");
+            dashboard = new DashboardData();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private string FormatCurrency(double value)
+    {
+        return value.ToString("C", new System.Globalization.CultureInfo("es-PA"));
+    }
+
+    private string GetBalanceColor()
+    {
+        var balance = (dashboard?.VentasMes ?? 0) - (dashboard?.GastosMes ?? 0);
+        return balance >= 0 ? "#10B981" : "#EF4444";
     }
 }
+
+<style>
+    .kpi-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .kpi-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
+    
+    .white-btn {
+        background-color: white !important;
+        color: #2563EB !important;
+        font-weight: 600;
+    }
+    
+    .white-btn:hover {
+        background-color: rgba(255,255,255,0.9) !important;
+    }
+    
+    .summary-item .mud-progress-bar {
+        height: 8px;
+        border-radius: 4px;
+    }
+</style>

@@ -1,0 +1,104 @@
+@page "/expenses"
+@inject ApiService Api
+@inject ISnackbar Snackbar
+
+<PageTitle>Gastos - ContabilidadPanama</PageTitle>
+
+<MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mb-4">Gastos</MudText>
+
+<MudGrid>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Total Gastos</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700; color: #dc2626;">$12,450.00</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Este Mes</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700;">$3,250.00</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Pendientes</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700; color: #f59e0b;">5</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Categorías</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700;">8</MudText>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<MudPaper Elevation="2" Style="border-radius: 16px;" Class="mt-4">
+    <MudToolBar Class="pa-3">
+        <MudTextField @bind-Value="searchString" 
+                     Placeholder="Buscar gastos..." 
+                     Adornment="Adornment.Start"
+                     AdornmentIcon="@Icons.Material.Filled.Search"
+                     Immediate="true"
+                     Class="mr-3"
+                     Style="max-width: 300px;" />
+        
+        <MudSpacer />
+        
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add">
+            Nuevo Gasto
+        </MudButton>
+    </MudToolBar>
+
+    <MudTable Items="@expenses" Dense="true" Hover="true" Striped="true" Elevation="0">
+        <HeaderContent>
+            <MudTh>Fecha</MudTh>
+            <MudTh>Descripción</MudTh>
+            <MudTh>Categoría</MudTh>
+            <MudTh>Monto</MudTh>
+            <MudTh>Estado</MudTh>
+            <MudTh Style="text-align: center;">Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Date.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd Style="font-weight: 500;">@context.Description</MudTd>
+            <MudTd>
+                <MudChip T="string" Size="Size.Small" Color="Color.Secondary" Variant="Variant.Outlined">
+                    @context.Category
+                </MudChip>
+            </MudTd>
+            <MudTd Style="font-weight: 600;">$@context.Amount.ToString("N2")</MudTd>
+            <MudTd>
+                <MudChip T="string" Size="Size.Small" Color="@(context.Status == "Pagado" ? Color.Success : Color.Warning)" Variant="Variant.Filled">
+                    @context.Status
+                </MudChip>
+            </MudTd>
+            <MudTd Style="text-align: center;">
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+</MudPaper>
+
+@code {
+    private string searchString = "";
+    
+    private List<ExpenseDto> expenses = new()
+    {
+        new() { Id = 1, Date = DateTime.Now.AddDays(-2), Description = "Alquiler oficina", Category = "Inmuebles", Amount = 1500.00m, Status = "Pagado" },
+        new() { Id = 2, Date = DateTime.Now.AddDays(-5), Description = "Servicios públicos", Category = "Servicios", Amount = 350.00m, Status = "Pendiente" },
+        new() { Id = 3, Date = DateTime.Now.AddDays(-10), Description = "Materiales oficina", Category = "Suministros", Amount = 225.50m, Status = "Pagado" },
+        new() { Id = 4, Date = DateTime.Now.AddDays(-15), Description = "Mantenimiento equipo", Category = "Mantenimiento", Amount = 180.00m, Status = "Pagado" }
+    };
+
+    public class ExpenseDto
+    {
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        public string Description { get; set; } = "";
+        public string Category { get; set; } = "";
+        public decimal Amount { get; set; }
+        public string Status { get; set; } = "";
+    }
+}

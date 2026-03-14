@@ -1,0 +1,108 @@
+@page "/products"
+@inject ApiService Api
+@inject ISnackbar Snackbar
+
+<PageTitle>Productos - ContabilidadPanama</PageTitle>
+
+<MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mb-4">Productos</MudText>
+
+<MudPaper Elevation="2" Style="border-radius: 16px;">
+    <MudToolBar Class="pa-3">
+        <MudTextField @bind-Value="searchString" 
+                     Placeholder="Buscar productos..." 
+                     Adornment="Adornment.Start"
+                     AdornmentIcon="@Icons.Material.Filled.Search"
+                     Immediate="true"
+                     Class="mr-3"
+                     Style="max-width: 300px;" />
+        
+        <MudSpacer />
+        
+        <MudButton Variant="Variant.Filled" 
+                  Color="Color.Primary" 
+                  StartIcon="@Icons.Material.Filled.Add">
+            Nuevo Producto
+        </MudButton>
+    </MudToolBar>
+
+    <MudTable Items="@filteredProducts" 
+              Dense="true" 
+              Hover="true" 
+              Striped="true"
+              Loading="@isLoading"
+              Elevation="0">
+        <HeaderContent>
+            <MudTh>Código</MudTh>
+            <MudTh>Nombre</MudTh>
+            <MudTh>Categoría</MudTh>
+            <MudTh>Precio</MudTh>
+            <MudTh>Stock</MudTh>
+            <MudTh Style="text-align: center;">Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>
+                <MudChip T="string" Size="Size.Small" Color="Color.Default" Variant="Variant.Outlined">
+                    @context.Code
+                </MudChip>
+            </MudTd>
+            <MudTd Style="font-weight: 500;">@context.Name</MudTd>
+            <MudTd>@context.Category</MudTd>
+            <MudTd Style="font-weight: 600;">$@context.Price.ToString("N2")</MudTd>
+            <MudTd>
+                <MudChip T="string" Size="Size.Small" Color="@(context.Stock <= 10 ? Color.Warning : Color.Success)" Variant="Variant.Filled">
+                    @context.Stock
+                </MudChip>
+            </MudTd>
+            <MudTd Style="text-align: center;">
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small" />
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No se encontraron productos</MudText>
+        </NoRecordsContent>
+    </MudTable>
+</MudPaper>
+
+@code {
+    private List<ProductDto> products = new();
+    private string searchString = "";
+    private bool isLoading = true;
+    
+    private IEnumerable<ProductDto> filteredProducts => string.IsNullOrEmpty(searchString) 
+        ? products 
+        : products.Where(p => p.Name?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProducts();
+    }
+
+    private async Task LoadProducts()
+    {
+        isLoading = true;
+        try
+        {
+            products = await Api.GetAsync<List<ProductDto>>("/products") ?? new();
+        }
+        catch { products = GetSampleProducts(); }
+        finally { isLoading = false; }
+    }
+
+    private List<ProductDto> GetSampleProducts() => new()
+    {
+        new() { Id = 1, Code = "PROD-001", Name = "Laptop Dell XPS 15", Category = "Electrónica", Price = 1200.00m, Stock = 15 },
+        new() { Id = 2, Code = "PROD-002", Name = "Monitor LG 27\"", Category = "Electrónica", Price = 350.00m, Stock = 8 },
+        new() { Id = 3, Code = "PROD-003", Name = "Teclado Mecánico", Category = "Accesorios", Price = 85.00m, Stock = 25 }
+    };
+
+    public class ProductDto
+    {
+        public int Id { get; set; }
+        public string Code { get; set; } = "";
+        public string Name { get; set; } = "";
+        public string Category { get; set; } = "";
+        public decimal Price { get; set; }
+        public int Stock { get; set; }
+    }
+}

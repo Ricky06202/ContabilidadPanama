@@ -4,3 +4,7 @@ mysql-connector-python==9.6.0
 python-dotenv==1.2.2
 sqlalchemy==2.0.35
 pydantic==2.12.5
+pydantic[email]
+passlib
+python-jose[cryptography]
+bcrypt

@@ -1,0 +1,67 @@
+@inject IDialogService DialogService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm @ref="form" @bind-IsValid="formValid">
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="Client.Ruc" 
+                                 Label="RUC" 
+                                 Required="true"
+                                 RequiredError="El RUC es requerido"
+                                 Mask="@(new PatternMask("#############"))" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="Client.Name" 
+                                 Label="Nombre / Razón Social" 
+                                 Required="true"
+                                 RequiredError="El nombre es requerido" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="Client.Email" 
+                                 Label="Email"
+                                 Type="email" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="Client.Phone" 
+                                 Label="Teléfono"
+                                 Mask="@(new PatternMask("####-####"))" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="Client.Address" 
+                                 Label="Dirección" />
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancelar</MudButton>
+        <MudButton Color="Color.Primary" 
+                  Variant="Variant.Filled" 
+                  OnClick="Submit"
+                  Disabled="!formValid">
+            Guardar
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Parameter]
+    public ClientDto Client { get; set; } = new();
+    
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+    
+    private MudForm? form;
+    private bool formValid;
+
+    private void Submit()
+    {
+        MudDialog?.Close(DialogResult.Ok(Client));
+    }
+
+    private void Cancel()
+    {
+        MudDialog?.Cancel();
+    }
+}

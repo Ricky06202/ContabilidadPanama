@@ -1,0 +1,92 @@
+@page "/banking"
+@inject ApiService Api
+@inject ISnackbar Snackbar
+
+<PageTitle>Bancos - ContabilidadPanama</PageTitle>
+
+<MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mb-4">Bancos</MudText>
+
+<MudGrid>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Total Disponible</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700; color: #10b981;">$45,230.00</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Ingresos Mes</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700; color: #10b981;">$18,500.00</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Egresos Mes</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700; color: #dc2626;">$8,750.00</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
+            <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Cuentas</MudText>
+            <MudText Typo="Typo.h5" Style="font-weight: 700;">3</MudText>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<MudPaper Elevation="2" Style="border-radius: 16px;" Class="mt-4">
+    <MudToolBar Class="pa-3">
+        <MudText Typo="Typo.h6">Cuentas Bancarias</MudText>
+        <MudSpacer />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add">
+            Nueva Cuenta
+        </MudButton>
+    </MudToolBar>
+
+    <MudSimpleTable Dense="true" Hover="true" Striped="true">
+        <thead>
+            <tr>
+                <th>Banco</th>
+                <th>Número de Cuenta</th>
+                <th>Tipo</th>
+                <th>Saldo</th>
+                <th>Estado</th>
+                <th style="text-align: center;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><MudChip T="string" Size="Size.Small" Color="Color.Primary">Banco General</MudChip></td>
+                <td>****4521</td>
+                <td>Corriente</td>
+                <td style="font-weight: 600;">$25,000.00</td>
+                <td><MudChip T="string" Size="Size.Small" Color="Color.Success" Variant="Variant.Filled">Activa</MudChip></td>
+                <td style="text-align: center;">
+                    <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Primary" Size="Size.Small" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small" />
+                </td>
+            </tr>
+            <tr>
+                <td><MudChip T="string" Size="Size.Small" Color="Color.Secondary">Banistmo</MudChip></td>
+                <td>****7832</td>
+                <td>Ahorros</td>
+                <td style="font-weight: 600;">$15,230.00</td>
+                <td><MudChip T="string" Size="Size.Small" Color="Color.Success" Variant="Variant.Filled">Activa</MudChip></td>
+                <td style="text-align: center;">
+                    <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Primary" Size="Size.Small" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small" />
+                </td>
+            </tr>
+            <tr>
+                <td><MudChip T="string" Size="Size.Small" Color="Color.Warning">Global Bank</MudChip></td>
+                <td>****9012</td>
+                <td>Corriente</td>
+                <td style="font-weight: 600;">$5,000.00</td>
+                <td><MudChip T="string" Size="Size.Small" Color="Color.Warning" Variant="Variant.Filled">Pendiente</MudChip></td>
+                <td style="text-align: center;">
+                    <MudIconButton Icon="@Icons.Material.Filled.Visibility" Color="Color.Primary" Size="Size.Small" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" Size="Size.Small" />
+                </td>
+            </tr>
+        </tbody>
+    </MudSimpleTable>
+</MudPaper>
