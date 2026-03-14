@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Container, Typography, Box, useTheme } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import LaptopIcon from '@mui/icons-material/Laptop';
 
 const Hero = () => {
 	const theme = useTheme();
@@ -54,16 +53,11 @@ const Hero = () => {
 						Plataforma moderna de contabilidad construida para contadores y empresarios panameños. 
 						Reemplaza MYOB con una experiencia fluida, rápida y diseñada para el futuro.
 					</Typography>
-					<Box 
-						display="flex" 
-						gap={3} 
-						flexWrap="wrap" 
-						justifyContent="center"
-					>
-						<Button
+					<Button
 							variant="contained"
 							size="large"
 							startIcon={<PlayArrowIcon />}
+							href="https://app.contapanama.rsanjur.com"
 							sx={{
 								background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
 								px: 4,
@@ -77,30 +71,8 @@ const Hero = () => {
 								},
 							}}
 						>
-							Comenzar gratis
+							Comenzar ahora
 						</Button>
-						<Button
-							variant="outlined"
-							size="large"
-							startIcon={<LaptopIcon />}
-							sx={{
-								borderColor: '#2563eb',
-								color: '#2563eb',
-								px: 4,
-								py: 1.5,
-								fontSize: '1.1rem',
-								fontWeight: 600,
-								borderRadius: '12px',
-								textTransform: 'none',
-								'&:hover': {
-									borderColor: '#1d4ed8',
-									backgroundColor: 'rgba(37, 99, 235, 0.04)',
-								},
-							}}
-						>
-							Demo interactiva
-						</Button>
-					</Box>
 				</Box>
 			</Container>
 		</section>
