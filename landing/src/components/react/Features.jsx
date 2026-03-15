@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Box, Grid, Paper } from '@mui/material';
+import { Container, Typography, Box, Paper } from '@mui/material';
 import SpeedIcon from '@mui/icons-material/Speed';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import DevicesIcon from '@mui/icons-material/Devices';
@@ -74,25 +74,37 @@ const Features = () => {
 					</Typography>
 				</Box>
 
-				<Grid container spacing={6} justifyContent="center">
+			<Box 
+				sx={{
+					display: 'grid',
+					gridTemplateColumns: {
+						xs: '1fr',
+						sm: 'repeat(2, 1fr)',
+						md: 'repeat(3, 1fr)'
+					},
+					gap: 6,
+					justifyItems: 'center'
+				}}
+			>
 					{features.map((feature, index) => (
-						<Grid item xs={12} sm={6} md={4} key={index}>
-							<Paper
-								elevation={0}
-								sx={{
-									p: 3,
-									height: '100%',
-									borderRadius: 4,
-									backgroundColor: '#f8fafc',
-									border: '1px solid #e2e8f0',
-									textAlign: 'center',
-									transition: 'all 0.3s ease',
-									'&:hover': {
-										transform: 'translateY(-8px)',
-										boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-									},
-								}}
-							>
+						<Paper
+							key={index}
+							elevation={0}
+							sx={{
+								p: 3,
+								width: '100%',
+								maxWidth: '400px',
+								borderRadius: 4,
+								backgroundColor: '#f8fafc',
+								border: '1px solid #e2e8f0',
+								textAlign: 'center',
+								transition: 'all 0.3s ease',
+								'&:hover': {
+									transform: 'translateY(-8px)',
+									boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+								},
+							}}
+						>
 								<Box 
 									sx={{ 
 										width: '100%',
@@ -132,13 +144,12 @@ const Features = () => {
 								<Typography variant="h6" component="h3" sx={{ fontWeight: 600, mb: 1.5, color: '#1e293b' }}>
 									{feature.title}
 								</Typography>
-								<Typography variant="body2" sx={{ color: '#64748b', lineHeight: 1.6 }}>
-									{feature.description}
-								</Typography>
-							</Paper>
-						</Grid>
+							<Typography variant="body2" sx={{ color: '#64748b', lineHeight: 1.6 }}>
+								{feature.description}
+							</Typography>
+						</Paper>
 					))}
-				</Grid>
+			</Box>
 			</Container>
 		</section>
 	);
