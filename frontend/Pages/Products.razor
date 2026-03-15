@@ -4,9 +4,28 @@
 
 <PageTitle>Productos - ContabilidadPanama</PageTitle>
 
-<MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mb-4">Productos</MudText>
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Elevation="0" Class="page-header-gradient pa-4">
+            <MudGrid AlignItems="AlignItems.Center">
+                <MudItem xs="12" md="8">
+                    <div class="d-flex align-center">
+                        <MudIcon Icon="@Icons.Material.Filled.Inventory2" Class="mr-3" Style="font-size: 2.5rem; color: white;" />
+                        <div>
+                            <MudText Typo="Typo.h5" Style="font-weight: 700; color: white;">Productos</MudText>
+                            <MudText Typo="Typo.body2" Style="color: rgba(255,255,255,0.8);">Gestiona tu inventario</MudText>
+                        </div>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" md="4" Class="d-flex justify-content-md-end">
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" StartIcon="@Icons.Material.Filled.Add" Class="header-action-btn">Nuevo Producto</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 
-<MudPaper Elevation="2" Style="border-radius: 16px;">
+<MudPaper Elevation="2" Class="mt-4" Style="border-radius: 16px;">
     <MudToolBar Class="pa-3">
         <MudTextField @bind-Value="searchString" 
                      Placeholder="Buscar productos..." 
@@ -106,3 +125,8 @@
         public int Stock { get; set; }
     }
 }
+
+<style>
+    .page-header-gradient { background: linear-gradient(135deg, #10B981 0%, #059669 100%); border-radius: 16px !important; }
+    .header-action-btn { background-color: white !important; color: #10B981 !important; font-weight: 600; border-radius: 10px; }
+</style>

@@ -6,9 +6,39 @@
 
 <PageTitle>Clientes - ContabilidadPanama</PageTitle>
 
-<MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mb-4">Clientes</MudText>
+<!-- Modern Page Header -->
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Elevation="0" Class="page-header-gradient pa-4">
+            <MudGrid AlignItems="AlignItems.Center">
+                <MudItem xs="12" md="8">
+                    <div class="d-flex align-center">
+                        <MudIcon Icon="@Icons.Material.Filled.People" Class="mr-3" Style="font-size: 2.5rem; color: white;" />
+                        <div>
+                            <MudText Typo="Typo.h5" Style="font-weight: 700; color: white;">
+                                Clientes
+                            </MudText>
+                            <MudText Typo="Typo.body2" Style="color: rgba(255,255,255,0.8);">
+                                Gestiona tu directorio de clientes
+                            </MudText>
+                        </div>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" md="4" Class="d-flex justify-content-md-end">
+                    <MudButton Variant="Variant.Filled" 
+                              Color="Color.Default" 
+                              StartIcon="@Icons.Material.Filled.Add"
+                              OnClick="OpenCreateDialog"
+                              Class="header-action-btn">
+                        Nuevo Cliente
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 
-<MudPaper Elevation="2" Style="border-radius: 16px;">
+<MudPaper Elevation="2" Class="mt-4" Style="border-radius: 16px;">
     <MudToolBar Class="pa-3">
         <MudTextField @bind-Value="searchString" 
                      Placeholder="Buscar clientes..." 
@@ -234,3 +264,22 @@
         }
     }
 }
+
+<style>
+    .page-header-gradient {
+        background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+        border-radius: 16px !important;
+    }
+    
+    .header-action-btn {
+        background-color: white !important;
+        color: #2563EB !important;
+        font-weight: 600;
+        border-radius: 10px;
+    }
+    
+    .header-action-btn:hover {
+        background-color: rgba(255,255,255,0.9) !important;
+        transform: translateY(-2px);
+    }
+</style>

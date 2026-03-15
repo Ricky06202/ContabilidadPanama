@@ -4,9 +4,28 @@
 
 <PageTitle>Nómina - ContabilidadPanama</PageTitle>
 
-<MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mb-4">Nómina</MudText>
-
 <MudGrid>
+    <MudItem xs="12">
+        <MudPaper Elevation="0" Class="page-header-gradient pa-4">
+            <MudGrid AlignItems="AlignItems.Center">
+                <MudItem xs="12" md="8">
+                    <div class="d-flex align-center">
+                        <MudIcon Icon="@Icons.Material.Filled.Badge" Class="mr-3" Style="font-size: 2.5rem; color: white;" />
+                        <div>
+                            <MudText Typo="Typo.h5" Style="font-weight: 700; color: white;">Nómina</MudText>
+                            <MudText Typo="Typo.body2" Style="color: rgba(255,255,255,0.8);">Gestiona tus empleados y pagos</MudText>
+                        </div>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" md="4" Class="d-flex justify-content-md-end">
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" StartIcon="@Icons.Material.Filled.Add" Class="header-action-btn">Nuevo Empleado</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<MudGrid Class="mt-4">
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Elevation="2" Style="border-radius: 16px; padding: 20px;">
             <MudText Typo="Typo.subtitle2" Style="opacity: 0.7;">Total Empleados</MudText>
@@ -92,3 +111,8 @@
         public string Status { get; set; } = "";
     }
 }
+
+<style>
+    .page-header-gradient { background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%); border-radius: 16px !important; }
+    .header-action-btn { background-color: white !important; color: #06B6D4 !important; font-weight: 600; border-radius: 10px; }
+</style>

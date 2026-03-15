@@ -6,9 +6,25 @@
 
 <PageTitle>Configuración - ContabilidadPanama</PageTitle>
 
-<MudText Typo="Typo.h4" Style="font-weight: 700;" Class="mb-4">Configuración</MudText>
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Elevation="0" Class="page-header-gradient pa-4">
+            <MudGrid AlignItems="AlignItems.Center">
+                <MudItem xs="12" md="8">
+                    <div class="d-flex align-center">
+                        <MudIcon Icon="@Icons.Material.Filled.Settings" Class="mr-3" Style="font-size: 2.5rem; color: white;" />
+                        <div>
+                            <MudText Typo="Typo.h5" Style="font-weight: 700; color: white;">Configuración</MudText>
+                            <MudText Typo="Typo.body2" Style="color: rgba(255,255,255,0.8);">Personaliza tu experiencia</MudText>
+                        </div>
+                    </div>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 
-<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true">
+<MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" Class="mt-4">
     <MudTabPanel Text="Empresa" Icon="@Icons.Material.Filled.Business">
         <MudPaper Elevation="0" Class="pa-4">
             <MudText Typo="Typo.h6" Style="font-weight: 600;" Class="mb-4">Datos de la Empresa</MudText>
@@ -489,3 +505,7 @@
         public string? Phone { get; set; }
     }
 }
+
+<style>
+    .page-header-gradient { background: linear-gradient(135deg, #64748B 0%, #475569 100%); border-radius: 16px !important; }
+</style>
