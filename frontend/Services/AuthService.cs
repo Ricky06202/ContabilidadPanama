@@ -90,14 +90,19 @@ public class AuthService : INotifyPropertyChanged
                     OnPropertyChanged(nameof(Token));
                     return (true, null);
                 }
+                return (false, "Respuesta inválida del servidor");
             }
-            
-            return (false, "Credenciales inválidas");
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Login failed: {response.StatusCode} - {errorContent}");
+                return (false, $"Error: {response.StatusCode}");
+            }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Login error: {ex.Message}");
-            return (false, "Error de conexión");
+            return (false, $"Error de conexión: {ex.Message}");
         }
     }
 
