@@ -72,3 +72,11 @@ class TokenResponse(BaseModel):
 class PasswordChange(BaseModel):
     old_password: str
     new_password: str = Field(..., min_length=6)
+
+class RegisterRequest(BaseModel):
+    email: EmailStr
+    password: str = Field(..., min_length=6)
+    name: str = Field(..., min_length=1)
+    company_name: str = Field(..., min_length=1)
+    ruc: str = Field(..., min_length=5)
+    phone: Optional[str] = None

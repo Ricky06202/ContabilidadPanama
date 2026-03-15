@@ -8,7 +8,7 @@ from app.database import get_db
 from app.models.models import User, Tenant
 from app.models.schemas import (
     UserCreate, UserResponse, LoginRequest, TokenResponse,
-    TenantCreate, TenantResponse, PasswordChange
+    TenantCreate, TenantResponse, PasswordChange, RegisterRequest
 )
 from app.utils.auth import hash_password, verify_password
 from app.utils.jwt import create_access_token, decode_token
@@ -128,6 +128,76 @@ def login(login_data: LoginRequest, db: Session = Depends(get_db)):
             status_code=status.HTTP_403_FORBIDDEN,
             detail="User account is inactive"
         )
+    
+    access_token = create_access_token(data={"sub": str(user.id), "role": user.role})
+    
+    return TokenResponse(
+        access_token=access_token,
+        user=UserResponse(
+            id=user.id,
+            email=user.email,
+            name=user.name,
+            tenant_id=user.tenant_id,
+            role=user.role,
+            is_active=user.is_active,
+            created_at=user.created_at
+        )
+    )
+
+@router.post("/register-complete", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
+def register_complete(data: RegisterRequest, db: Session = Depends(get_db)):
+    existing_user = db.query(User).filter(User.email == data.email).first()
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already registered"
+        )
+    
+    existing_tenant = db.query(Tenant).filter(Tenant.ruc == data.ruc).first()
+    if existing_tenant:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="RUC already registered"
+        )
+    
+    new_tenant = Tenant(
+        name=data.company_name,
+        ruc=data.ruc,
+        phone=data.phone,
+        is_active=True
+    )
+    db.add(new_tenant)
+    db.commit()
+    db.refresh(new_tenant)
+    
+    hashed_pw = hash_password(data.password)
+    new_user = User(
+        email=data.email,
+        name=data.name,
+        password_hash=hashed_pw,
+        tenant_id=new_tenant.id,
+        role="admin",
+        is_active=True
+    )
+    
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    
+    access_token = create_access_token(data={"sub": str(new_user.id), "role": new_user.role})
+    
+    return TokenResponse(
+        access_token=access_token,
+        user=UserResponse(
+            id=new_user.id,
+            email=new_user.email,
+            name=new_user.name,
+            tenant_id=new_user.tenant_id,
+            role=new_user.role,
+            is_active=new_user.is_active,
+            created_at=new_user.created_at
+        )
+    )
     
     access_token = create_access_token(data={"sub": str(user.id), "role": user.role})
     
