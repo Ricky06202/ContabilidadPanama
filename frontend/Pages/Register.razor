@@ -1,0 +1,135 @@
+@page "/register"
+@layout AuthLayout
+@inject NavigationManager Navigation
+@inject ISnackbar Snackbar
+
+<PageTitle>Registrarse - ContabilidadPanama</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center justify-center" Style="height: 100vh;">
+    <MudPaper Elevation="25" Class="pa-8" Style="width: 100%; max-width: 450px; border-radius: 16px;">
+        <div class="text-center mb-4">
+            <MudText Typo="Typo.h4" Style="font-weight: 700; background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                ContabilidadPanama
+            </MudText>
+            <MudText Typo="Typo.subtitle1" Class="mt-2" Color="Color.Secondary">
+                Crea tu cuenta gratis
+            </MudText>
+        </div>
+
+        <MudTextField @bind-Value="@name"
+                      Label="Nombre Completo"
+                      Variant="Variant.Outlined"
+                      Margin="Margin.Normal"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Person" />
+
+        <MudTextField @bind-Value="@email"
+                      Label="Correo Electrónico"
+                      Variant="Variant.Outlined"
+                      Margin="Margin.Normal"
+                      InputType="InputType.Email"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Email" />
+
+        <MudTextField @bind-Value="@companyName"
+                      Label="Nombre de la Empresa"
+                      Variant="Variant.Outlined"
+                      Margin="Margin.Normal"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Business" />
+
+        <MudTextField @bind-Value="@ruc"
+                      Label="RUC de la Empresa"
+                      Variant="Variant.Outlined"
+                      Margin="Margin.Normal"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Badge" />
+
+        <MudTextField @bind-Value="@password"
+                      Label="Contraseña"
+                      Variant="Variant.Outlined"
+                      Margin="Margin.Normal"
+                      InputType="InputType.Password"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Lock" />
+
+        <MudTextField @bind-Value="@confirmPassword"
+                      Label="Confirmar Contraseña"
+                      Variant="Variant.Outlined"
+                      Margin="Margin.Normal"
+                      InputType="InputType.Password"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Lock" />
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Class="mt-3">@errorMessage</MudAlert>
+        }
+
+        @if (isLoading)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="mt-4" />
+        }
+        else
+        {
+            <MudButton Variant="Variant.Filled"
+                      Color="Color.Primary"
+                      FullWidth="true"
+                      Size="Size.Large"
+                      Class="mt-4"
+                      OnClick="@HandleRegister">
+                Crear Cuenta
+            </MudButton>
+        }
+
+        <MudDivider Class="my-4" />
+
+        <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary">
+            ¿Ya tienes cuenta? <MudLink Href="/login" Color="Color.Primary">Iniciar Sesión</MudLink>
+        </MudText>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private string name = string.Empty;
+    private string email = string.Empty;
+    private string companyName = string.Empty;
+    private string ruc = string.Empty;
+    private string password = string.Empty;
+    private string confirmPassword = string.Empty;
+    private string errorMessage = string.Empty;
+    private bool isLoading = false;
+
+    private async Task HandleRegister()
+    {
+        errorMessage = string.Empty;
+
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) || 
+            string.IsNullOrEmpty(password) || string.IsNullOrEmpty(companyName))
+        {
+            errorMessage = "Por favor completa todos los campos";
+            return;
+        }
+
+        if (password != confirmPassword)
+        {
+            errorMessage = "Las contraseñas no coinciden";
+            return;
+        }
+
+        if (password.Length < 6)
+        {
+            errorMessage = "La contraseña debe tener al menos 6 caracteres";
+            return;
+        }
+
+        isLoading = true;
+        
+        await Task.Delay(1000);
+        
+        isLoading = false;
+        
+        Snackbar.Add("¡Registro exitoso! Por favor inicia sesión.", Severity.Success);
+        Navigation.NavigateTo("/login");
+    }
+}
