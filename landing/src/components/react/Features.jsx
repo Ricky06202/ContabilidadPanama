@@ -74,7 +74,7 @@ const Features = () => {
 					</Typography>
 				</Box>
 
-				<Grid container spacing={6}>
+				<Grid container spacing={6} justifyContent="center">
 					{features.map((feature, index) => (
 						<Grid item xs={12} sm={6} md={4} key={index}>
 							<Paper
