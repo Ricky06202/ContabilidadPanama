@@ -18,7 +18,7 @@ public class ApiService
         };
     }
 
-    private string _baseUrl = "https://api.contapanama.rsanjur.com";
+    private string _baseUrl = "https://app.contapanama.rsanjur.com/api";
 
     public async Task<T?> GetAsync<T>(string endpoint)
     {
