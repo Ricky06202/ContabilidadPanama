@@ -1,0 +1,15 @@
+# Blazor WebAssembly SPA Routing
+# Redirect all requests to index.html except API
+
+RewriteEngine On
+RewriteBase /
+
+# Don't rewrite API requests
+RewriteRule ^api/ - [L]
+
+# Don't rewrite existing files/directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite to index.html for SPA routing
+RewriteRule ^ /index.html [L]
