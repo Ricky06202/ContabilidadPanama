@@ -11,7 +11,7 @@ def application(environ, start_response):
     antes de cargar FastAPI. Esto es más robusto en ciertos servidores cPanel.
     """
     from a2wsgi import ASGIMiddleware
-    from main import app as fastapi_app
+    from app.main import app as fastapi_app
     
     # Creamos el puente y lo ejecutamos
     app_bridge = ASGIMiddleware(fastapi_app)
