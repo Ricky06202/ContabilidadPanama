@@ -9,28 +9,29 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="2" Dense="true" Class="app-bar-gradient">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle" />
+    <MudAppBar Elevation="0" Dense="true" Class="app-bar-modern">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle" Class="menu-btn" />
         
         <MudText Typo="Typo.h6" Class="ml-3 brand-text">
-            <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Medium" Class="mr-2" />
-            ContabilidadPanama
+            <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Medium" Class="mr-2 brand-icon" />
+            <span class="brand-name">ContabilidadPanama</span>
         </MudText>
         
         <MudSpacer />
         
-        <MudText Typo="Typo.body2" Class="mr-4 d-none d-sm-flex" Style="opacity: 0.8;">
+        <MudText Typo="Typo.body2" Class="mr-4 d-none d-md-flex date-display">
             @currentDate.ToString("dddd, d MMMM yyyy", spanishCulture)
         </MudText>
         
-        <MudIconButton Icon="@Icons.Material.Filled.Search" Color="Color.Inherit" Class="mr-1" Title="Buscar (Ctrl+K)" />
+        <MudIconButton Icon="@Icons.Material.Filled.Search" Color="Color.Inherit" Class="icon-btn" Title="Buscar (Ctrl+K)" />
         
         <MudIconButton Icon="@(Theme.IsDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" 
                        Color="Color.Inherit" 
                        OnClick="@ToggleTheme" 
+                       Class="icon-btn"
                        Title="@(Theme.IsDarkMode ? "Modo Claro" : "Modo Oscuro")" />
         
-        <MudMenu Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit">
+        <MudMenu Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" Class="icon-btn">
             <MudMenuItem>
                 <MudStack Row="true" AlignItems="AlignItems.Center">
                     <MudIcon Icon="@Icons.Material.Filled.Warning" Color="Color.Warning" Size="Size.Small" />
@@ -45,7 +46,7 @@
             </MudMenuItem>
         </MudMenu>
         
-        <MudMenu Icon="@Icons.Material.Filled.Person" Color="Color.Inherit">
+        <MudMenu Icon="@Icons.Material.Filled.Person" Color="Color.Inherit" Class="icon-btn">
             <MudMenuItem Href="/profile">
                 <MudIcon Icon="@Icons.Material.Filled.Person" Class="mr-2" />
                 Mi Perfil
@@ -62,78 +63,78 @@
         </MudMenu>
     </MudAppBar>
 
-    <MudDrawer @bind-Open="@_drawerOpen" Elevation="2" Variant="@DrawerVariant.Mini" MiniWidth="72px" ClipMode="DrawerClipMode.Always">
-        <MudDrawerHeader Class="pa-2">
-            <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Large" Color="Color.Primary" />
+    <MudDrawer @bind-Open="@_drawerOpen" Elevation="2" Variant="@DrawerVariant.Mini" MiniWidth="72px" ClipMode="DrawerClipMode.Always" Class="sidebar-modern">
+        <MudDrawerHeader Class="pa-3 sidebar-header">
+            <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Large" Color="Color.Primary" Class="sidebar-logo" />
         </MudDrawerHeader>
 
-        <MudNavMenu Rounded="true" Margin="Margin.Dense" Class="pa-1">
+        <MudNavMenu Rounded="true" Margin="Margin.Dense" Class="nav-menu-custom">
             <MudTooltip Text="Dashboard" Placement="Placement.Right">
-                <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All">
-                    <MudText Class="d-none d-md-flex">Dashboard</MudText>
+                <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard" Match="NavLinkMatch.All" Class="nav-item">
+                    <MudText Class="nav-text">Dashboard</MudText>
                 </MudNavLink>
             </MudTooltip>
             
             <MudTooltip Text="Facturación" Placement="Placement.Right">
-                <MudNavLink Href="/invoices" Icon="@Icons.Material.Filled.Description">
-                    <MudText Class="d-none d-md-flex">Facturas</MudText>
+                <MudNavLink Href="/invoices" Icon="@Icons.Material.Filled.Description" Class="nav-item">
+                    <MudText Class="nav-text">Facturas</MudText>
                 </MudNavLink>
             </MudTooltip>
             
             <MudTooltip Text="Clientes" Placement="Placement.Right">
-                <MudNavLink Href="/clients" Icon="@Icons.Material.Filled.People">
-                    <MudText Class="d-none d-md-flex">Clientes</MudText>
+                <MudNavLink Href="/clients" Icon="@Icons.Material.Filled.People" Class="nav-item">
+                    <MudText Class="nav-text">Clientes</MudText>
                 </MudNavLink>
             </MudTooltip>
             
             <MudTooltip Text="Proveedores" Placement="Placement.Right">
-                <MudNavLink Href="/providers" Icon="@Icons.Material.Filled.LocalShipping">
-                    <MudText Class="d-none d-md-flex">Proveedores</MudText>
+                <MudNavLink Href="/providers" Icon="@Icons.Material.Filled.LocalShipping" Class="nav-item">
+                    <MudText Class="nav-text">Proveedores</MudText>
                 </MudNavLink>
             </MudTooltip>
             
             <MudTooltip Text="Productos" Placement="Placement.Right">
-                <MudNavLink Href="/products" Icon="@Icons.Material.Filled.Inventory2">
-                    <MudText Class="d-none d-md-flex">Productos</MudText>
+                <MudNavLink Href="/products" Icon="@Icons.Material.Filled.Inventory2" Class="nav-item">
+                    <MudText Class="nav-text">Productos</MudText>
                 </MudNavLink>
             </MudTooltip>
             
             <MudTooltip Text="Gastos" Placement="Placement.Right">
-                <MudNavLink Href="/expenses" Icon="@Icons.Material.Filled.Payments">
-                    <MudText Class="d-none d-md-flex">Gastos</MudText>
+                <MudNavLink Href="/expenses" Icon="@Icons.Material.Filled.Payments" Class="nav-item">
+                    <MudText Class="nav-text">Gastos</MudText>
                 </MudNavLink>
             </MudTooltip>
             
             <MudTooltip Text="Bancos" Placement="Placement.Right">
-                <MudNavLink Href="/banking" Icon="@Icons.Material.Filled.AccountBalance">
-                    <MudText Class="d-none d-md-flex">Bancos</MudText>
+                <MudNavLink Href="/banking" Icon="@Icons.Material.Filled.AccountBalance" Class="nav-item">
+                    <MudText Class="nav-text">Bancos</MudText>
                 </MudNavLink>
             </MudTooltip>
             
             <MudTooltip Text="Nómina" Placement="Placement.Right">
-                <MudNavLink Href="/payroll" Icon="@Icons.Material.Filled.Badge">
-                    <MudText Class="d-none d-md-flex">Nómina</MudText>
+                <MudNavLink Href="/payroll" Icon="@Icons.Material.Filled.Badge" Class="nav-item">
+                    <MudText Class="nav-text">Nómina</MudText>
                 </MudNavLink>
             </MudTooltip>
             
-            <MudDivider Class="my-2" />
+            <MudDivider Class="my-3 nav-divider" />
             
             <MudTooltip Text="Reportes" Placement="Placement.Right">
-                <MudNavLink Href="/reports" Icon="@Icons.Material.Filled.Analytics">
-                    <MudText Class="d-none d-md-flex">Reportes</MudText>
+                <MudNavLink Href="/reports" Icon="@Icons.Material.Filled.Analytics" Class="nav-item">
+                    <MudText Class="nav-text">Reportes</MudText>
                 </MudNavLink>
             </MudTooltip>
             
             <MudTooltip Text="Configuración" Placement="Placement.Right">
-                <MudNavLink Href="/settings" Icon="@Icons.Material.Filled.Settings">
-                    <MudText Class="d-none d-md-flex">Ajustes</MudText>
+                <MudNavLink Href="/settings" Icon="@Icons.Material.Filled.Settings" Class="nav-item">
+                    <MudText Class="nav-text">Ajustes</MudText>
                 </MudNavLink>
             </MudTooltip>
         </MudNavMenu>
     </MudDrawer>
 
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="py-4">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="py-4 main-content">
             @Body
         </MudContainer>
     </MudMainContent>
@@ -181,13 +182,105 @@
 }
 
 <style>
-    .app-bar-gradient {
+    .app-bar-modern {
         background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%) !important;
+        backdrop-filter: blur(10px);
+    }
+    
+    .menu-btn {
+        transition: transform 0.2s ease;
+    }
+    
+    .menu-btn:hover {
+        transform: scale(1.1);
     }
     
     .brand-text {
         font-weight: 700;
         letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .brand-icon {
+        color: white;
+    }
+    
+    .brand-name {
+        background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .date-display {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+    }
+    
+    .icon-btn {
+        transition: all 0.2s ease;
+        border-radius: 10px;
+    }
+    
+    .icon-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: scale(1.05);
+    }
+    
+    .sidebar-modern {
+        background: var(--mud-palette-drawer-background) !important;
+        border-right: 1px solid var(--mud-palette-divider);
+    }
+    
+    .sidebar-header {
+        display: flex;
+        justify-content: center;
+        padding: 16px !important;
+    }
+    
+    .sidebar-logo {
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+    }
+    
+    .nav-menu-custom {
+        padding: 8px 12px;
+    }
+    
+    .nav-item {
+        border-radius: 12px !important;
+        margin-bottom: 4px !important;
+        padding: 12px 16px !important;
+        transition: all 0.2s ease;
+    }
+    
+    .nav-item:hover {
+        background: rgba(37, 99, 235, 0.08) !important;
+        transform: translateX(4px);
+    }
+    
+    .nav-item.active {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(124, 58, 237, 0.15) 100%) !important;
+        border-left: 3px solid #2563EB;
+    }
+    
+    .nav-text {
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+    
+    .nav-divider {
+        margin: 12px 0 !important;
+        opacity: 0.5;
+    }
+    
+    .main-content {
+        min-height: calc(100vh - 64px);
     }
     
     :root {
@@ -202,12 +295,48 @@
         display: none;
     }
     
-    .mud-nav-link {
-        border-radius: 8px !important;
-        margin-bottom: 4px !important;
+    /* Modern card styling */
+    .mud-card {
+        border-radius: 16px !important;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06) !important;
+        transition: all 0.3s ease !important;
     }
     
-    .mud-nav-link.active {
-        background: rgba(37, 99, 235, 0.1) !important;
+    .mud-card:hover {
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05) !important;
+        transform: translateY(-2px);
+    }
+    
+    /* Modern button styling */
+    .mud-button {
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        text-transform: none !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .mud-button:hover {
+        transform: translateY(-1px);
+    }
+    
+    /* Modern table styling */
+    .mud-table-root {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .mud-table-head {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+    
+    .mud-table-row:hover {
+        background: rgba(37, 99, 235, 0.04) !important;
+    }
+    
+    /* Smooth transitions */
+    * {
+        transition-property: background-color, border-color, color, fill, stroke;
+        transition-timing-function: ease;
+        transition-duration: 150ms;
     }
 </style>

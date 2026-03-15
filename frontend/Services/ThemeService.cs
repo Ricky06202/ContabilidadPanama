@@ -86,16 +86,21 @@ public class ThemeService : INotifyPropertyChanged
             Success = "#10B981",
             Warning = "#F59E0B",
             Error = "#EF4444",
-            AppbarBackground = "#2563EB",
+            AppbarBackground = "#FFFFFF",
+            AppbarText = "#1E293B",
             Background = "#F8FAFC",
             Surface = "#FFFFFF",
-            TextPrimary = "#1E293B",
+            TextPrimary = "#0F172A",
             TextSecondary = "#64748B",
             DrawerBackground = "#FFFFFF",
-            DrawerText = "#1E293B",
+            DrawerText = "#334155",
             DrawerIcon = "#64748B",
+            Divider = "#E2E8F0",
         },
-        LayoutProperties = new LayoutProperties()
+        LayoutProperties = new LayoutProperties
+        {
+            AppbarHeight = "64px",
+        }
     };
 
     private MudTheme CreateDarkTheme() => new MudTheme
@@ -110,14 +115,19 @@ public class ThemeService : INotifyPropertyChanged
             Warning = "#FBBF24",
             Error = "#F87171",
             AppbarBackground = "#1E293B",
+            AppbarText = "#F1F5F9",
             Background = "#0F172A",
             Surface = "#1E293B",
             TextPrimary = "#F1F5F9",
             TextSecondary = "#94A3B8",
             DrawerBackground = "#1E293B",
-            DrawerText = "#F1F5F9",
+            DrawerText = "#E2E8F0",
             DrawerIcon = "#94A3B8",
+            Divider = "#334155",
         },
-        LayoutProperties = new LayoutProperties()
+        LayoutProperties = new LayoutProperties
+        {
+            AppbarHeight = "64px",
+        }
     };
 }

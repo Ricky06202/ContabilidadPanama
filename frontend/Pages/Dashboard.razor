@@ -274,4 +274,38 @@
         height: 8px;
         border-radius: 4px;
     }
+    
+    /* Enhanced dashboard styles */
+    .kpi-card {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        opacity: 0.1;
+        transform: translate(30%, -30%);
+    }
+    
+    .kpi-card:nth-child(1)::before {
+        background: #2563EB;
+    }
+    
+    .kpi-card:nth-child(2)::before {
+        background: #10B981;
+    }
+    
+    .kpi-card:nth-child(3)::before {
+        background: #EF4444;
+    }
+    
+    .kpi-card:nth-child(4)::before {
+        background: #7C3AED;
+    }
 </style>
