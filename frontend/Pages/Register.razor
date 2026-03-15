@@ -101,6 +101,11 @@
     private string errorMessage = string.Empty;
     private bool isLoading = false;
 
+    private class ErrorResponse
+    {
+        public string? detail { get; set; }
+    }
+
     private async Task HandleRegister()
     {
         errorMessage = string.Empty;
@@ -145,8 +150,8 @@
             }
             else
             {
-                var error = await response.Content.ReadAsStringAsync();
-                errorMessage = "Error al registrar. El email o RUC ya pueden estar registrados.";
+                var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+                errorMessage = error?.detail ?? "Error al registrar";
             }
         }
         catch (Exception ex)

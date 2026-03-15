@@ -18,7 +18,7 @@ def application(environ, start_response):
     # Importar la app FastAPI solo cuando se necesita
     from app.main import app
     
-    # Convertir ASGI a WSGI
-    asgi_middleware = ASGIMiddleware(app)
+    # Convertir ASGI a WSGI sin threading
+    asgi_middleware = ASGIMiddleware(app, use_asgi_loop=False)
     
     return asgi_middleware(environ, start_response)
