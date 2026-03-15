@@ -26,3 +26,4 @@ click==8.1.7
 python-multipart==0.0.20
 a2wsgi==1.10.10
 python-dateutil==2.9.0
+requests==2.32.5
