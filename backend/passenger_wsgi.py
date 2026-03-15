@@ -1,20 +1,23 @@
 """
 Punto de entrada para cPanel (Phusion Passenger)
-Intentar usar xvicorn directamente
+Patrón de carga perezosa (Lazy Loading)
 """
 import os
 import sys
 
 # Agregar el directorio actual al path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(__file__))
 
-# Activar el virtualenv si existe
-venv = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bin", "python")
-if os.path.exists(venv) and sys.executable != venv:
-    os.execl(venv, venv, *sys.argv)
+# Activar virtualenv si existe
+venv_bin = os.path.join(os.path.dirname(__file__), "bin")
+if os.path.exists(venv_bin) and os.path.exists(os.path.join(venv_bin, "python")):
+    venv_lib = os.path.join(os.path.dirname(__file__), "lib")
+    sys.path.insert(0, venv_lib)
 
-# Importar la app FastAPI
-from app.main import app
-
-# Usar la app directamente - esto requiere que cPanel esté configurado para ASGI
-application = app
+def application(environ, start_response):
+    """Carga perezosa para evitar errores al inicio"""
+    from a2wsgi import ASGIMiddleware
+    from app.main import app as fastapi_app
+    
+    app_bridge = ASGIMiddleware(fastapi_app)
+    return app_bridge(environ, start_response)
