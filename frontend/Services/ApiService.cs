@@ -18,7 +18,7 @@ public class ApiService
         };
     }
 
-    private string _baseUrl = "http://localhost:8000/api";
+    private string _baseUrl = "https://app.contapanama.rsanjur.com/api";
 
     public async Task<T?> GetAsync<T>(string endpoint)
     {
