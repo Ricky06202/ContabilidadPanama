@@ -218,7 +218,8 @@ else
 
     private void Logout()
     {
-        Navigation.NavigateTo("/login");
+        Auth.LogoutAsync();
+        Navigation.NavigateTo("/login", forceLoad: true);
     }
 }
 
