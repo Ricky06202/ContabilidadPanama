@@ -9,8 +9,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 def application(environ, start_response):
     """WSGI entry point"""
-    from asgiref.wsgi import AsgiApp
+    from asgiref.wsgi import WsgiToAsgi
     from app.main import app
     
-    asgi_app = AsgiApp(app)
+    asgi_app = WsgiToAsgi(app)
     return asgi_app(environ, start_response)
