@@ -2,9 +2,9 @@ import React from 'react';
 import { Container, Typography, Box, Button } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-const VideoDemo = () => {
+	const VideoDemo = () => {
 	return (
-		<section sx={{ py: { xs: 12, md: 16 }, backgroundColor: '#1e293b' }}>
+		<section style={{ backgroundColor: '#0f172a', padding: '80px 0' }}>
 			<Container maxWidth="lg">
 				<Box textAlign="center" mb={8}>
 					<Typography 
