@@ -1,7 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
+import HowItWorks from '../components/HowItWorks.astro';
 import Features from '../components/Features.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Pricing from '../components/Pricing.astro';
+import VideoDemo from '../components/VideoDemo.astro';
+import Partners from '../components/Partners.astro';
+import TrustBadges from '../components/TrustBadges.astro';
+import FAQ from '../components/FAQ.astro';
 import CTA from '../components/CTA.astro';
 import SectionsWrapper from '../components/SectionsWrapper.astro';
 import { Container, Typography, Box } from '@mui/material';
@@ -10,7 +17,14 @@ import { Container, Typography, Box } from '@mui/material';
 <Layout>
 	<SectionsWrapper>
 		<Hero />
+		<TrustBadges />
+		<HowItWorks />
 		<Features />
+		<Testimonials />
+		<Pricing />
+		<VideoDemo />
+		<Partners />
+		<FAQ />
 		<CTA />
 		<!-- Footer -->
 		<footer sx={{ pt: 16, pb: 8, backgroundColor: 'grey.900', color: 'white' }}>
