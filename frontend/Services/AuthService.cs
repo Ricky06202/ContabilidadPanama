@@ -1,5 +1,7 @@
 using System.ComponentModel;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.JSInterop;
 
 namespace ContabilidadPanama.Frontend.Services;
@@ -136,7 +138,9 @@ public class AuthService : INotifyPropertyChanged
 
     private class LoginResponse
     {
+        [JsonPropertyName("access_token")]
         public string? AccessToken { get; set; }
+        [JsonPropertyName("token_type")]
         public string? TokenType { get; set; }
     }
 
