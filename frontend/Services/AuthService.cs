@@ -96,7 +96,19 @@ public class AuthService : INotifyPropertyChanged
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Login failed: {response.StatusCode} - {errorContent}");
-                return (false, $"Error: {response.StatusCode}");
+                
+                // Intentar parsear el error del backend
+                try
+                {
+                    var errorObj = System.Text.Json.JsonSerializer.Deserialize<ErrorResponse>(errorContent);
+                    if (!string.IsNullOrEmpty(errorObj?.detail))
+                    {
+                        return (false, errorObj.detail);
+                    }
+                }
+                catch { }
+                
+                return (false, "Email o contraseña incorrectos");
             }
         }
         catch (Exception ex)
@@ -124,5 +136,10 @@ public class AuthService : INotifyPropertyChanged
     {
         public string? AccessToken { get; set; }
         public string? TokenType { get; set; }
+    }
+
+    private class ErrorResponse
+    {
+        public string? detail { get; set; }
     }
 }
