@@ -1,5 +1,32 @@
 # Deploy en cPanel - ContabilidadPanama
 
+## Requisitos previos
+
+1. Subdominio configurado en cPanel (ej: `app.contapanama.rsanjur.com`)
+2. Python App creada en cPanel (Setup Python App)
+3. MySQL con la base de datos creada
+
+## Dependencias requeridas en requirements.txt
+
+```
+fastapi
+sqlalchemy
+pymysql
+cryptography
+bcrypt
+python-jose
+python-dotenv
+uvicorn
+pydantic
+pydantic-core
+email-validator
+httpx
+a2wsgi
+python-dateutil
+```
+
+**Importante**: Asegurarse de tener `a2wsgi` y `bcrypt` en requirements.txt.
+
 ## Estructura de carpetas
 
 ```
@@ -34,21 +61,67 @@ pip install -r requirements.txt
 
 ### Paso 3: Archivo passenger_wsgi.py
 
+El archivo debe usar el patrón de carga perezosa con a2wsgi:
+
 ```python
-"""
-Punto de entrada para cPanel (Passenger)
-"""
 import os
 import sys
 
-# Agregar el directorio actual al path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# 1. Agregamos el directorio actual al Path de Python
+sys.path.insert(0, os.path.dirname(__file__))
 
-from app.main import app
+def application(environ, start_response):
+    """
+    Patrón de Carga Perezosa (Lazy Loading):
+    Importamos dentro de la función para asegurar que el entorno esté 100% listo 
+    antes de cargar FastAPI. Esto es más robusto en ciertos servidores cPanel.
+    """
+    from a2wsgi import ASGIMiddleware
+    from app.main import app as fastapi_app
+    
+    # Creamos el puente y lo ejecutamos
+    app_bridge = ASGIMiddleware(fastapi_app)
+    return app_bridge(environ, start_response)
+```
 
-# Retornar la aplicación ASGI
-# Passenger会自动处理ASGI应用
-app = app
+### Paso 4: Instalar dependencias en el servidor
+
+```bash
+# Activar el virtualenv de la aplicación
+source /home/rsanjur/virtualenv/app.contapanama.rsanjur.com/api/3.11/bin/activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+```
+
+### Paso 5: Verificar que funciona
+
+```bash
+# Probar la app
+curl https://app.contapanama.rsanjur.com/api/
+```
+
+## Solución de problemas
+
+### Error: can't start new thread
+El servidor no permite threads. Asegúrate de usar el patrón de carga perezosa mostrado arriba.
+
+### Error: ModuleNotFoundError
+Verifica que:
+1. El virtualenv tenga instalado a2wsgi: `pip install a2wsgi`
+2. El import sea correcto: `from app.main import app`
+3. La estructura de carpetas sea: `/api/passenger_wsgi.py` y `/api/app/main.py`
+
+### Error: Password verification fails
+El hash de contraseña en la base de datos debe ser bcrypt (no argon2). Actualiza auth.py para usar bcrypt directamente:
+```python
+import bcrypt
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 ```
 
 ### Paso 4: Configurar Base de Datos
