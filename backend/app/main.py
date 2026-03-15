@@ -41,17 +41,17 @@ app.add_middleware(
 
 # Importar routers después de definir app para evitar ciclos
 from app.routers import auth, tenants, users, invoices, entities, inventory, expenses, banking, payroll, reports, integrations
-app.include_router(auth.router, prefix="/api")
-app.include_router(tenants.router, prefix="/api")
-app.include_router(users.router, prefix="/api")
-app.include_router(invoices.router, prefix="/api")
-app.include_router(entities.router, prefix="/api")
-app.include_router(inventory.router, prefix="/api")
-app.include_router(expenses.router, prefix="/api")
-app.include_router(banking.router, prefix="/api")
-app.include_router(payroll.router, prefix="/api")
-app.include_router(reports.router, prefix="/api")
-app.include_router(integrations.router, prefix="/api")
+app.include_router(auth.router)
+app.include_router(tenants.router)
+app.include_router(users.router)
+app.include_router(invoices.router)
+app.include_router(entities.router)
+app.include_router(inventory.router)
+app.include_router(expenses.router)
+app.include_router(banking.router)
+app.include_router(payroll.router)
+app.include_router(reports.router)
+app.include_router(integrations.router)
 
 @app.get("/")
 def read_root():
