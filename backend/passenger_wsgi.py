@@ -1,16 +1,14 @@
 """
 Punto de entrada para cPanel (Phusion Passenger)
-Usando asgiref para convertir FastAPI a WSGI
+FastAPI como WSGI directamente
 """
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-def application(environ, start_response):
-    """WSGI entry point"""
-    from asgiref.wsgi import WsgiToAsgi
-    from app.main import app
-    
-    asgi_app = WsgiToAsgi(app)
-    return asgi_app(environ, start_response)
+# Importar la app al inicio
+from app.main import app
+
+# FastAPI es ASGI, pero puede ejecutarse como WSGI con el adapter correcto
+application = app
