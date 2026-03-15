@@ -80,7 +80,9 @@ public class AuthService : INotifyPropertyChanged
 
             if (response.IsSuccessStatusCode)
             {
+                Console.WriteLine($"Login response status: {response.StatusCode}");
                 var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
+                Console.WriteLine($"Login result: {result?.AccessToken}");
                 if (result != null && !string.IsNullOrEmpty(result.AccessToken))
                 {
                     await _js.InvokeVoidAsync("localStorage.setItem", "auth_token", result.AccessToken);
