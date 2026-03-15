@@ -10,7 +10,7 @@ public class AuthService : INotifyPropertyChanged
     private readonly HttpClient _http;
     private bool _isAuthenticated;
     private string _token = "";
-    private string _baseUrl = "https://app.contapanama.rsanjur.com/api";
+    private string _baseUrl = "https://api.contapanama.rsanjur.com";
     
     public event PropertyChangedEventHandler? PropertyChanged;
     
